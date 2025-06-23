@@ -27,3 +27,19 @@ export async function subirComprobante(id: number, archivo: File) {
 
   return response.json();
 }
+
+export async function getParticipantes() {
+  const response = await fetch(`${API_URL}/participantes`);
+  return response.json();
+}
+
+export async function actualizarEstado(id: number, nuevoEstado: string) {
+    const response = await fetch(`http://localhost:8000/admin/participantes/${id}/estado`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ estado: nuevoEstado })
+    });
+    return response.json();
+}
