@@ -14,6 +14,7 @@ type Participante = {
   id: number;
   nombre: string;
   apellido: string;
+  cedula: string; // Asegúrate de que tu backend lo envía
   numero_telefono: string;
   producto: Producto;
   estado: string;
@@ -28,13 +29,14 @@ export default function AdminPanel() {
 
   useEffect(() => {
     cargarParticipantes();
+    // eslint-disable-next-line
   }, []);
 
   const cargarParticipantes = async () => {
     try {
       showLoading("Cargando participantes...");
       const data = await getParticipantes();
-      setParticipantes(data);
+      setParticipantes(data || []);
     } catch (err) {
       console.error(err);
       showError("Error al cargar participantes");
@@ -43,14 +45,12 @@ export default function AdminPanel() {
     }
   };
 
-  // ✅ Eliminar participante desde el estado
   const handleDelete = (id: number) => {
     setParticipantes((prev) => prev.filter((p) => p.id !== id));
   };
 
-  // ✅ Actualizar (refrescar) participantes si es necesario
   const handleUpdate = () => {
-    cargarParticipantes(); // o puedes hacer cambios más específicos si lo prefieres
+    cargarParticipantes();
   };
 
   const handleLogout = async () => {
@@ -59,12 +59,12 @@ export default function AdminPanel() {
       text: "¿Estás seguro de que deseas cerrar sesión?",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#dc2626", // Rojo de la marca (red-600)
-      cancelButtonColor: "#6b7280", // Gris neutro
+      confirmButtonColor: "#dc2626",
+      cancelButtonColor: "#6b7280",
       confirmButtonText: "Sí, cerrar sesión",
       cancelButtonText: "Cancelar",
-      background: "#1f2937", // Fondo gris oscuro
-      color: "#ffffff", // Texto blanco
+      background: "#1f2937",
+      color: "#ffffff",
       customClass: {
         popup: "fast-racing-popup",
         title: "fast-racing-title",
@@ -73,57 +73,14 @@ export default function AdminPanel() {
         cancelButton: "fast-racing-cancel-btn",
       },
       didOpen: () => {
-        // Inyectar estilos personalizados
         const style = document.createElement("style");
         style.textContent = `
-          .fast-racing-popup {
-            border: 2px solid #dc2626 !important;
-            border-radius: 12px !important;
-            box-shadow: 0 25px 50px -12px rgba(220, 38, 38, 0.25) !important;
-          }
-          .fast-racing-title {
-            color: #dc2626 !important;
-            font-weight: 700 !important;
-            font-size: 1.5rem !important;
-          }
-          .fast-racing-text {
-            color: #e5e7eb !important;
-            font-size: 1rem !important;
-          }
-          .fast-racing-confirm-btn {
-            background: linear-gradient(135deg, #dc2626, #b91c1c) !important;
-            border: none !important;
-            border-radius: 8px !important;
-            font-weight: 600 !important;
-            padding: 12px 24px !important;
-            transition: all 0.2s ease !important;
-            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3) !important;
-          }
-          .fast-racing-confirm-btn:hover {
-            background: linear-gradient(135deg, #b91c1c, #991b1b) !important;
-            transform: translateY(-1px) !important;
-            box-shadow: 0 6px 16px rgba(220, 38, 38, 0.4) !important;
-          }
-          .fast-racing-cancel-btn {
-            background: linear-gradient(135deg, #6b7280, #4b5563) !important;
-            border: none !important;
-            border-radius: 8px !important;
-            font-weight: 600 !important;
-            padding: 12px 24px !important;
-            transition: all 0.2s ease !important;
-            color: #ffffff !important;
-          }
-          .fast-racing-cancel-btn:hover {
-            background: linear-gradient(135deg, #4b5563, #374151) !important;
-            transform: translateY(-1px) !important;
-          }
-          .swal2-icon.swal2-warning {
-            border-color: #dc2626 !important;
-            color: #dc2626 !important;
-          }
-          .swal2-icon.swal2-warning .swal2-icon-content {
-            color: #dc2626 !important;
-          }
+          .fast-racing-popup { border: 2px solid #dc2626 !important; border-radius: 12px !important; }
+          .fast-racing-title { color: #dc2626 !important; font-weight: 700 !important; font-size: 1.5rem !important; }
+          .fast-racing-text { color: #e5e7eb !important; font-size: 1rem !important; }
+          .fast-racing-confirm-btn { background: linear-gradient(135deg, #dc2626, #b91c1c) !important; border-radius: 8px !important; }
+          .fast-racing-cancel-btn { background: linear-gradient(135deg, #6b7280, #4b5563) !important; border-radius: 8px !important; color: #fff !important; }
+          .swal2-icon.swal2-warning { border-color: #dc2626 !important; color: #dc2626 !important; }
         `;
         document.head.appendChild(style);
       },
@@ -137,7 +94,7 @@ export default function AdminPanel() {
         icon: "success",
         background: "#1f2937",
         color: "#ffffff",
-        confirmButtonColor: "#10b981", // Verde coherente con el ícono
+        confirmButtonColor: "#10b981",
         confirmButtonText: "Continuar",
         customClass: {
           popup: "fast-racing-success-popup",
@@ -148,47 +105,10 @@ export default function AdminPanel() {
         didOpen: () => {
           const style = document.createElement("style");
           style.textContent = `
-            .fast-racing-success-popup {
-              border: 2px solid #10b981 !important;
-              border-radius: 12px !important;
-              box-shadow: 0 25px 50px -12px rgba(16, 185, 129, 0.25) !important;
-            }
-            .fast-racing-success-title {
-              color: #10b981 !important;
-              font-weight: 700 !important;
-              font-size: 1.5rem !important;
-            }
-            .fast-racing-success-text {
-              color: #e5e7eb !important;
-              font-size: 1rem !important;
-            }
-            .fast-racing-success-btn {
-              background: linear-gradient(135deg, #10b981, #059669) !important;
-              border: none !important;
-              border-radius: 8px !important;
-              font-weight: 600 !important;
-              padding: 12px 24px !important;
-              transition: all 0.2s ease !important;
-              box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3) !important;
-              color: #ffffff !important;
-            }
-            .fast-racing-success-btn:hover {
-              background: linear-gradient(135deg, #059669, #047857) !important;
-              transform: translateY(-1px) !important;
-              box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4) !important;
-            }
-            .swal2-icon.swal2-success {
-              border-color: #10b981 !important;
-            }
-            .swal2-icon.swal2-success .swal2-success-ring {
-              border-color: #10b981 !important;
-            }
-            .swal2-icon.swal2-success .swal2-success-fix {
-              background-color: #10b981 !important;
-            }
-            .swal2-icon.swal2-success [class^=swal2-success-line] {
-              background-color: #10b981 !important;
-            }
+            .fast-racing-success-popup { border: 2px solid #10b981 !important; border-radius: 12px !important; }
+            .fast-racing-success-title { color: #10b981 !important; font-weight: 700 !important; font-size: 1.5rem !important; }
+            .fast-racing-success-text { color: #e5e7eb !important; font-size: 1rem !important; }
+            .fast-racing-success-btn { background: linear-gradient(135deg, #10b981, #059669) !important; border-radius: 8px !important; color: #fff !important; }
           `;
           document.head.appendChild(style);
         },
@@ -198,7 +118,6 @@ export default function AdminPanel() {
     }
   };
 
-  // Instalar Excel
   const handleDescargarExcel = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -233,16 +152,17 @@ export default function AdminPanel() {
     }
   };
 
+  // Productos únicos para filtro
   const productosUnicos = Array.from(
-    new Set(participantes.map((p) => p.producto?.nombre))
-  ).filter(Boolean);
+    new Set(participantes.map((p) => p.producto?.nombre || ""))
+  ).filter((v) => v);
 
-  // Obtener estados únicos para el filtro
+  // Estados únicos para filtro
   const estadosUnicos = Array.from(
-    new Set(participantes.map((p) => p.estado))
-  ).filter(Boolean);
+    new Set(participantes.map((p) => p.estado || ""))
+  ).filter((v) => v);
 
-  // Filtrar participantes según los filtros seleccionados
+  // Filtrado
   const participantesFiltrados = participantes.filter((p) => {
     const coincideProducto =
       filtroProducto === "todos" || p.producto?.nombre === filtroProducto;
@@ -257,9 +177,7 @@ export default function AdminPanel() {
         <h1 className="text-3xl font-bold mb-4 sm:mb-0">
           Panel Administrativo
         </h1>
-
         <div className="flex flex-col sm:flex-row gap-3">
-          {/* Botón Descargar Excel mejorado */}
           <button
             onClick={handleDescargarExcel}
             className="group relative inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900"
@@ -268,8 +186,6 @@ export default function AdminPanel() {
             <span>Descargar Excel</span>
             <div className="absolute inset-0 bg-white/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
           </button>
-
-          {/* Botón Cerrar Sesión mejorado */}
           <button
             onClick={handleLogout}
             className="group relative inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-900"
@@ -329,14 +245,22 @@ export default function AdminPanel() {
           </tr>
         </thead>
         <tbody>
-          {participantesFiltrados.map((p) => (
-            <ParticipanteRow
-              key={p.id}
-              participante={p}
-              onDelete={handleDelete}
-              onUpdate={handleUpdate}
-            />
-          ))}
+          {participantesFiltrados.length === 0 ? (
+            <tr>
+              <td colSpan={8} className="text-center py-8 text-gray-400">
+                No hay participantes para mostrar.
+              </td>
+            </tr>
+          ) : (
+            participantesFiltrados.map((p) => (
+              <ParticipanteRow
+                key={p.id}
+                participante={p}
+                onDelete={handleDelete}
+                onUpdate={handleUpdate}
+              />
+            ))
+          )}
         </tbody>
       </table>
     </div>

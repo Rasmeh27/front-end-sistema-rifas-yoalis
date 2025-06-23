@@ -1,85 +1,33 @@
-"use client";
-
 import { useState } from "react";
 
 // Iconos SVG simples
 const TicketIcon = () => (
-  <svg
-    className="h-4 w-4"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"
-    />
+  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
   </svg>
 );
 
 const TrashIcon = () => (
-  <svg
-    className="h-4 w-4"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-    />
+  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
   </svg>
 );
 
 const CheckIcon = () => (
-  <svg
-    className="h-3 w-3"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M5 13l4 4L19 7"
-    />
+  <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
   </svg>
 );
 
 const XIcon = () => (
-  <svg
-    className="h-3 w-3"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M6 18L18 6M6 6l12 12"
-    />
+  <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
   </svg>
 );
 
 const ClockIcon = () => (
-  <svg
-    className="h-3 w-3"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-    />
+  <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
   </svg>
 );
 
@@ -87,10 +35,32 @@ const LoadingSpinner = () => (
   <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
 );
 
-export default function ParticipanteRow({ participante, onUpdate, onDelete }) {
-  const [ticketAsignado, setTicketAsignado] = useState(
-    participante.numero_ticket
-  );
+// Tipos de props
+type Producto = {
+  id: number;
+  nombre: string;
+};
+
+type Participante = {
+  id: number;
+  nombre: string;
+  apellido: string;
+  cedula: string;
+  numero_telefono: string;
+  producto: Producto;
+  estado: string;
+  comprobante: string;
+  numero_ticket?: string | null;
+};
+
+type Props = {
+  participante: Participante;
+  onUpdate: () => void;
+  onDelete: (id: number) => void;
+};
+
+export default function ParticipanteRow({ participante, onUpdate, onDelete }: Props) {
+  const [ticketAsignado, setTicketAsignado] = useState(participante.numero_ticket);
   const [estadoActual, setEstadoActual] = useState(participante.estado);
   const [isLoadingTicket, setIsLoadingTicket] = useState(false);
   const [isLoadingEstado, setIsLoadingEstado] = useState(false);
@@ -125,7 +95,7 @@ export default function ParticipanteRow({ participante, onUpdate, onDelete }) {
     }
   };
 
-  const cambiarEstado = async (nuevoEstado) => {
+  const cambiarEstado = async (nuevoEstado: string) => {
     setIsLoadingEstado(true);
     try {
       const response = await fetch(
@@ -185,7 +155,7 @@ export default function ParticipanteRow({ participante, onUpdate, onDelete }) {
     }
   };
 
-  const showNotification = (message, type) => {
+  const showNotification = (message: string, type: "success" | "error") => {
     const notification = document.createElement("div");
     notification.className = `fixed top-4 right-4 z-50 px-4 py-2 rounded-lg text-white font-medium transition-all duration-300 ${
       type === "success" ? "bg-green-600" : "bg-red-600"
@@ -197,35 +167,35 @@ export default function ParticipanteRow({ participante, onUpdate, onDelete }) {
     }, 3000);
   };
 
-  const getEstadoLabel = (estado) => {
+  const getEstadoLabel = (estado: string) => {
     const baseClasses =
       "inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-full transition-all duration-200";
     switch (estado.toLowerCase()) {
       case "aprobado":
         return (
-          <span
-            className={`${baseClasses} bg-green-600/20 text-green-400 border border-green-600/30`}
-          >
+          <span className={`${baseClasses} bg-green-600/20 text-green-400 border border-green-600/30`}>
             <CheckIcon /> Aprobado
           </span>
         );
       case "rechazado":
         return (
-          <span
-            className={`${baseClasses} bg-red-600/20 text-red-400 border border-red-600/30`}
-          >
+          <span className={`${baseClasses} bg-red-600/20 text-red-400 border border-red-600/30`}>
             <XIcon /> Rechazado
           </span>
         );
       default:
         return (
-          <span
-            className={`${baseClasses} bg-yellow-600/20 text-yellow-400 border border-yellow-600/30`}
-          >
+          <span className={`${baseClasses} bg-yellow-600/20 text-yellow-400 border border-yellow-600/30`}>
             <ClockIcon /> Pendiente
           </span>
         );
     }
+  };
+
+  // Detecta si el comprobante es imagen o PDF
+  const isImage = (base64: string) => {
+    // Solo PNG/JPG soportados aquí, puedes mejorar esto si lo necesitas
+    return base64.startsWith("/") || base64.startsWith("iVBOR") || base64.startsWith("/9j/");
   };
 
   return (
@@ -237,13 +207,13 @@ export default function ParticipanteRow({ participante, onUpdate, onDelete }) {
 
       {/* Nombre completo */}
       <td className="p-4">
-  <div className="text-white font-medium">
-    {participante.nombre} {participante.apellido}
-  </div>
-</td>
+        <div className="text-white font-medium">
+          {participante.nombre} {participante.apellido}
+        </div>
+      </td>
 
-{/* Nombre (mal puesta como cédula) */}
-<td className="p-4 text-gray-300 font-mono text-sm">{participante.cedula}</td>
+      {/* Cedula */}
+      <td className="p-4 text-gray-300 font-mono text-sm">{participante.cedula}</td>
 
       {/* Teléfono */}
       <td className="p-4 text-gray-300 font-mono text-sm">
@@ -253,10 +223,11 @@ export default function ParticipanteRow({ participante, onUpdate, onDelete }) {
       {/* Producto */}
       <td className="p-4">
         <span className="inline-block px-2 py-1 bg-gray-700 text-gray-300 rounded text-sm">
-          {participante.producto.nombre}
+          {participante.producto?.nombre || "Sin producto"}
         </span>
       </td>
 
+      {/* Estado */}
       <td className="p-4">
         <div className="flex items-center gap-2">
           {getEstadoLabel(estadoActual)}
@@ -273,29 +244,44 @@ export default function ParticipanteRow({ participante, onUpdate, onDelete }) {
         </div>
       </td>
 
+      {/* Comprobante */}
       <td className="p-4">
         {participante.comprobante ? (
-          <div className="relative group">
-            <img
-              src={`data:image/png;base64,${participante.comprobante}`}
-              alt="Comprobante"
-              className="h-12 w-12 object-cover rounded-lg border border-gray-600 cursor-pointer hover:scale-110 transition-transform duration-200"
-              onClick={() => {
-                const newWindow = window.open();
-                newWindow.document.write(
-                  `<img src="data:image/png;base64,${participante.comprobante}" style="max-width:100%;height:auto;">`
-                );
-              }}
-            />
-            <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-              Click para ampliar
+          isImage(participante.comprobante) ? (
+            <div className="relative group">
+              <img
+                src={`data:image/png;base64,${participante.comprobante}`}
+                alt="Comprobante"
+                className="h-12 w-12 object-cover rounded-lg border border-gray-600 cursor-pointer hover:scale-110 transition-transform duration-200"
+                onClick={() => {
+                  const newWindow = window.open();
+                  if (newWindow) {
+                    newWindow.document.write(
+                      `<img src="data:image/png;base64,${participante.comprobante}" style="max-width:100%;height:auto;">`
+                    );
+                  }
+                }}
+              />
+              <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                Click para ampliar
+              </div>
             </div>
-          </div>
+          ) : (
+            <a
+              href={`data:application/pdf;base64,${participante.comprobante}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-400 underline"
+            >
+              Ver PDF
+            </a>
+          )
         ) : (
           <span className="text-gray-500 text-sm italic">Sin comprobante</span>
         )}
       </td>
 
+      {/* Ticket */}
       <td className="p-4">
         {ticketAsignado ? (
           <div className="inline-flex items-center gap-2 px-3 py-2 bg-red-600/20 border border-red-600/30 rounded-lg">
@@ -323,6 +309,7 @@ export default function ParticipanteRow({ participante, onUpdate, onDelete }) {
         )}
       </td>
 
+      {/* Acciones */}
       <td className="p-4">
         <button
           onClick={eliminarParticipante}
