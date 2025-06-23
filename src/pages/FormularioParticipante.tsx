@@ -426,17 +426,6 @@ export default function FormularioParticipante() {
             </button>
           </form>
         </div>
-
-        {/* Footer */}
-        <div className="text-center mt-12 text-gray-400">
-          <p className="text-sm">
-            © 2025 Fast Racing Tuning. Todos los derechos reservados.
-          </p>
-          <p className="text-xs mt-2">
-            El sorteo se realizará el 27 de julio de 2025. Términos y
-            condiciones aplican.
-          </p>
-        </div>
       </div>
     </div>
   );
