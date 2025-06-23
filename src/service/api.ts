@@ -10,7 +10,7 @@ export async function crearParticipante(data: any) {
   formData.append("direccion", data.direccion);
   formData.append("comprobante", data.comprobante); // archivo incluido aquí
 
-  const response = await fetch(`${API_URL}/participantes`, {
+  const response = await fetch(`https://sistema-de-rifas-fastapi.onrender.com/participantes`, {
     method: "POST",
     body: formData
   });
@@ -22,7 +22,7 @@ export async function subirComprobante(id: number, archivo: File) {
   const formData = new FormData();
   formData.append("file", archivo);
 
-  const response = await fetch(`${API_URL}/comprobante/${id}`, {
+  const response = await fetch(`https://sistema-de-rifas-fastapi.onrender.com/comprobante/${id}`, {
     method: "POST",
     body: formData
   });
@@ -31,7 +31,7 @@ export async function subirComprobante(id: number, archivo: File) {
 }
 
 export async function getParticipantes() {
-  const response = await fetch(`${API_URL}/participantes`);
+  const response = await fetch(`https://sistema-de-rifas-fastapi.onrender.com/participantes`);
   return response.json();
 }
 
