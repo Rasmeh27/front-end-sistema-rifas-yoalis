@@ -30,7 +30,7 @@ export function showLoading(message: string) {
     title: message,
     allowOutsideClick: false,
     didOpen: () => {
-      Swal.showLoading();
+      Swal.showLoading(null);
     },
     ...baseConfig
   });

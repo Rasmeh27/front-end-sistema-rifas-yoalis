@@ -1,7 +1,7 @@
-import React from "react";
+import type { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 
-export default function RutaProtegida({ children }: { children: JSX.Element }) {
+export default function RutaProtegida({ children }: { children: ReactNode }) {
   const token = localStorage.getItem("token");
 
   if (!token) {
