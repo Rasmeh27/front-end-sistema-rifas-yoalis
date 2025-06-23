@@ -6,6 +6,8 @@ export async function crearParticipante(data: any) {
   formData.append("apellido", data.apellido);
   formData.append("numero_telefono", data.telefono);
   formData.append("producto_id", data.producto_id.toString());
+  formData.append("cedula", data.cedula);
+  formData.append("direccion", data.direccion);
   formData.append("comprobante", data.comprobante); // archivo incluido aquí
 
   const response = await fetch(`${API_URL}/participantes`, {
