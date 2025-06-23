@@ -1,4 +1,3 @@
-const API_URL = "https://sistema-de-rifas-fastapi.onrender.com";
 
 export async function crearParticipante(data: any) {
   const formData = new FormData();
