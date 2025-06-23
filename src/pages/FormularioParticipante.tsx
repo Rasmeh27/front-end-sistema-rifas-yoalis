@@ -143,7 +143,7 @@ export default function FormularioParticipante() {
                   <div className="flex justify-between flex-wrap gap-y-1">
                     <span className="font-medium">Cuenta PayPal:</span>
                     <span className="font-mono break-all text-right">
-                      ventas@fastracingtuning.com
+                      faberimport@outlook.com
                     </span>
                   </div>
                   <div className="flex justify-between flex-wrap gap-y-1">
