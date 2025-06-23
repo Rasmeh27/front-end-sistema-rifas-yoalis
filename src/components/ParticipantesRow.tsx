@@ -2,32 +2,82 @@ import { useState } from "react";
 
 // Iconos SVG simples
 const TicketIcon = () => (
-  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
+  <svg
+    className="h-4 w-4"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"
+    />
   </svg>
 );
 
 const TrashIcon = () => (
-  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+  <svg
+    className="h-4 w-4"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+    />
   </svg>
 );
 
 const CheckIcon = () => (
-  <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+  <svg
+    className="h-3 w-3"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M5 13l4 4L19 7"
+    />
   </svg>
 );
 
 const XIcon = () => (
-  <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+  <svg
+    className="h-3 w-3"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M6 18L18 6M6 6l12 12"
+    />
   </svg>
 );
 
 const ClockIcon = () => (
-  <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+  <svg
+    className="h-3 w-3"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+    />
   </svg>
 );
 
@@ -41,6 +91,11 @@ type Producto = {
   nombre: string;
 };
 
+type Ticket = {
+  id: number;
+  numero: string;
+};
+
 type Participante = {
   id: number;
   nombre: string;
@@ -50,7 +105,7 @@ type Participante = {
   producto: Producto;
   estado: string;
   comprobante: string;
-  numero_ticket?: string | null;
+  tickets: Ticket[]; // ✅ nuevo
 };
 
 type Props = {
@@ -59,8 +114,14 @@ type Props = {
   onDelete: (id: number) => void;
 };
 
-export default function ParticipanteRow({ participante, onUpdate, onDelete }: Props) {
-  const [ticketAsignado, setTicketAsignado] = useState(participante.numero_ticket);
+// ...importaciones e íconos igual que antes (sin cambios)...
+
+export default function ParticipanteRow({
+  participante,
+  onUpdate,
+  onDelete,
+}: Props) {
+  const [tickets, setTickets] = useState<Ticket[]>(participante.tickets || []);
   const [estadoActual, setEstadoActual] = useState(participante.estado);
   const [isLoadingTicket, setIsLoadingTicket] = useState(false);
   const [isLoadingEstado, setIsLoadingEstado] = useState(false);
@@ -78,14 +139,20 @@ export default function ParticipanteRow({ participante, onUpdate, onDelete }: Pr
           },
         }
       );
-
       const data = await response.json();
       if (response.ok) {
-        const numero = data.msg.match(/\d{4}/)?.[0] || "Asignado";
-        setTicketAsignado(numero);
-        showNotification("Ticket asignado correctamente", "success");
+        if (Array.isArray(data.numeros_asignados)) {
+          const nuevosTickets = data.numeros_asignados.map((num: string, i: number) => ({
+            id: Date.now() + i,
+            numero: num,
+          }));
+          setTickets(nuevosTickets);
+          showNotification("Tickets asignados correctamente", "success");
+        } else {
+          showNotification("Respuesta inesperada del servidor", "error");
+        }
       } else {
-        showNotification(data.detail || "Error al asignar ticket", "error");
+        showNotification(data.detail || "Error al asignar tickets", "error");
       }
     } catch (error) {
       console.error("Error:", error);
@@ -128,7 +195,6 @@ export default function ParticipanteRow({ participante, onUpdate, onDelete }: Pr
 
   const eliminarParticipante = async () => {
     if (!window.confirm("¿Estás seguro de eliminar este participante?")) return;
-
     setIsDeleting(true);
     try {
       const response = await fetch(
@@ -140,7 +206,6 @@ export default function ParticipanteRow({ participante, onUpdate, onDelete }: Pr
           },
         }
       );
-
       if (response.ok) {
         showNotification("Participante eliminado correctamente", "success");
         onDelete(participante.id);
@@ -162,72 +227,60 @@ export default function ParticipanteRow({ participante, onUpdate, onDelete }: Pr
     }`;
     notification.textContent = message;
     document.body.appendChild(notification);
-    setTimeout(() => {
-      notification.remove();
-    }, 3000);
+    setTimeout(() => notification.remove(), 3000);
   };
 
   const getEstadoLabel = (estado: string) => {
-    const baseClasses =
-      "inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-full transition-all duration-200";
+    const base = "inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-full";
     switch (estado.toLowerCase()) {
       case "aprobado":
-        return (
-          <span className={`${baseClasses} bg-green-600/20 text-green-400 border border-green-600/30`}>
-            <CheckIcon /> Aprobado
-          </span>
-        );
+        return <span className={`${base} bg-green-600/20 text-green-400 border border-green-600/30`}><CheckIcon /> Aprobado</span>;
       case "rechazado":
-        return (
-          <span className={`${baseClasses} bg-red-600/20 text-red-400 border border-red-600/30`}>
-            <XIcon /> Rechazado
-          </span>
-        );
+        return <span className={`${base} bg-red-600/20 text-red-400 border border-red-600/30`}><XIcon /> Rechazado</span>;
       default:
-        return (
-          <span className={`${baseClasses} bg-yellow-600/20 text-yellow-400 border border-yellow-600/30`}>
-            <ClockIcon /> Pendiente
-          </span>
-        );
+        return <span className={`${base} bg-yellow-600/20 text-yellow-400 border border-yellow-600/30`}><ClockIcon /> Pendiente</span>;
     }
   };
 
-  // Detecta si el comprobante es imagen o PDF
   const isImage = (base64: string) => {
-    // Solo PNG/JPG soportados aquí, puedes mejorar esto si lo necesitas
     return base64.startsWith("/") || base64.startsWith("iVBOR") || base64.startsWith("/9j/");
   };
 
   return (
     <tr className="border-t border-gray-700/50 hover:bg-gray-800/30 transition-colors duration-200">
-      {/* ID */}
-      <td className="p-4 text-gray-300 font-mono text-sm">
-        #{participante.id}
-      </td>
-
-      {/* Nombre completo */}
-      <td className="p-4">
-        <div className="text-white font-medium">
-          {participante.nombre} {participante.apellido}
-        </div>
-      </td>
-
-      {/* Cedula */}
+      <td className="p-4 text-gray-300 font-mono text-sm">#{participante.id}</td>
+      <td className="p-4 text-white font-medium">{participante.nombre} {participante.apellido}</td>
       <td className="p-4 text-gray-300 font-mono text-sm">{participante.cedula}</td>
-
-      {/* Teléfono */}
-      <td className="p-4 text-gray-300 font-mono text-sm">
-        {participante.numero_telefono}
-      </td>
-
-      {/* Producto */}
+      <td className="p-4 text-gray-300 font-mono text-sm">{participante.numero_telefono}</td>
       <td className="p-4">
         <span className="inline-block px-2 py-1 bg-gray-700 text-gray-300 rounded text-sm">
           {participante.producto?.nombre || "Sin producto"}
         </span>
       </td>
 
-      {/* Estado */}
+      {/* ✅ TICKETS */}
+      <td className="p-4">
+        {tickets.length > 0 ? (
+          <div className="flex flex-wrap gap-2">
+            {tickets.map((t) => (
+              <div key={t.id} className="inline-flex items-center gap-2 px-3 py-1 bg-red-600/20 border border-red-600/30 rounded-lg">
+                <TicketIcon />
+                <span className="text-red-400 font-mono font-semibold">#{t.numero}</span>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <button
+            onClick={asignarTicket}
+            disabled={isLoadingTicket}
+            className="inline-flex items-center gap-2 px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors duration-200 text-sm font-medium disabled:cursor-not-allowed"
+          >
+            {isLoadingTicket ? <><LoadingSpinner /> Asignando...</> : <><TicketIcon /> Asignar Tickets</>}
+          </button>
+        )}
+      </td>
+
+      {/* ✅ ESTADO */}
       <td className="p-4">
         <div className="flex items-center gap-2">
           {getEstadoLabel(estadoActual)}
@@ -244,7 +297,7 @@ export default function ParticipanteRow({ participante, onUpdate, onDelete }: Pr
         </div>
       </td>
 
-      {/* Comprobante */}
+      {/* ✅ COMPROBANTE */}
       <td className="p-4">
         {participante.comprobante ? (
           isImage(participante.comprobante) ? (
@@ -281,50 +334,14 @@ export default function ParticipanteRow({ participante, onUpdate, onDelete }: Pr
         )}
       </td>
 
-      {/* Ticket */}
-      <td className="p-4">
-        {ticketAsignado ? (
-          <div className="inline-flex items-center gap-2 px-3 py-2 bg-red-600/20 border border-red-600/30 rounded-lg">
-            <TicketIcon />
-            <span className="text-red-400 font-mono font-semibold">
-              #{ticketAsignado}
-            </span>
-          </div>
-        ) : (
-          <button
-            onClick={asignarTicket}
-            disabled={isLoadingTicket}
-            className="inline-flex items-center gap-2 px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors duration-200 text-sm font-medium disabled:cursor-not-allowed"
-          >
-            {isLoadingTicket ? (
-              <>
-                <LoadingSpinner /> Asignando...
-              </>
-            ) : (
-              <>
-                <TicketIcon /> Asignar Ticket
-              </>
-            )}
-          </button>
-        )}
-      </td>
-
-      {/* Acciones */}
+      {/* ✅ ACCIONES */}
       <td className="p-4">
         <button
           onClick={eliminarParticipante}
           disabled={isDeleting}
           className="inline-flex items-center gap-2 px-3 py-2 bg-red-600/20 hover:bg-red-600 border border-red-600/30 hover:border-red-600 text-red-400 hover:text-white rounded-lg transition-all duration-200 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {isDeleting ? (
-            <>
-              <LoadingSpinner /> Eliminando...
-            </>
-          ) : (
-            <>
-              <TrashIcon /> Eliminar
-            </>
-          )}
+          {isDeleting ? <><LoadingSpinner /> Eliminando...</> : <><TrashIcon /> Eliminar</>}
         </button>
       </td>
     </tr>

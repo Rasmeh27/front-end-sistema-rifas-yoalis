@@ -11,6 +11,9 @@ import {
   CreditCard,
   Trophy,
   FileText,
+  Hash,
+  MapPin,
+  IdCard 
 } from "lucide-react";
 import { crearParticipante } from "../service/api";
 import { showSuccess, showError, showLoading } from "../utils/alerts";
@@ -28,6 +31,8 @@ export default function FormularioParticipante() {
   });
 
   const productos = ["MAGIC MOTORSPORT HW Kit", "Alientech Kess3"];
+
+  const [cantidad, setCantidad] = useState(1);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -66,6 +71,7 @@ export default function FormularioParticipante() {
         direccion: formData.direccion,
         producto_id: formData.producto === "MAGIC MOTORSPORT HW Kit" ? 1 : 2,
         comprobante: formData.comprobante,
+        cantidad_numeros: cantidad,
       });
 
       Swal.close(); // cerrar loading
@@ -300,7 +306,7 @@ export default function FormularioParticipante() {
 
             <div className="space-y-2">
               <label className="flex items-center text-sm font-medium text-gray-300 mb-2">
-                <User className="h-4 w-4 mr-2 text-red-500" />
+                <IdCard className="h-4 w-4 mr-2 text-red-500" />
                 Cédula
               </label>
               <input
@@ -332,7 +338,7 @@ export default function FormularioParticipante() {
 
             <div className="space-y-2">
               <label className="flex items-center text-sm font-medium text-gray-300 mb-2">
-                <User className="h-4 w-4 mr-2 text-red-500" />
+                <MapPin  className="h-4 w-4 mr-2 text-red-500" />
                 Dirección
               </label>
               <input
@@ -365,6 +371,21 @@ export default function FormularioParticipante() {
                   </option>
                 ))}
               </select>
+            </div>
+
+            <div className="space-y-2">
+              <label className="flex items-center text-sm font-medium text-gray-300 mb-2">
+                <Hash className="h-4 w-4 mr-2 text-red-500" />
+                Cantidad de números
+              </label>
+              <input
+                type="number"
+                min={1}
+                value={cantidad}
+                onChange={(e) => setCantidad(parseInt(e.target.value))}
+                required
+                className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-red-500"
+              />
             </div>
 
             <div className="space-y-2">

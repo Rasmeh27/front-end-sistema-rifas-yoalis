@@ -10,6 +10,11 @@ type Producto = {
   nombre: string;
 };
 
+type Ticket = {
+  id: number;
+  numero: string;
+};
+
 type Participante = {
   id: number;
   nombre: string;
@@ -17,9 +22,11 @@ type Participante = {
   cedula: string; // Asegúrate de que tu backend lo envía
   numero_telefono: string;
   producto: Producto;
+   cantidad_numeros: number;
   estado: string;
   comprobante: string;
   numero_ticket?: string | null;
+  tickets: Ticket[];
 };
 
 export default function AdminPanel() {
@@ -239,6 +246,7 @@ export default function AdminPanel() {
             <th className="p-3">Cedula</th>
             <th className="p-3">Teléfono</th>
             <th className="p-3">Producto</th>
+            <th className="p-3">Tickets</th>
             <th className="p-3">Estado</th>
             <th className="p-3">Comprobante</th>
             <th className="p-3">Acciones</th>

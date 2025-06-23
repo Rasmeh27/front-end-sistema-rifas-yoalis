@@ -195,7 +195,7 @@ export default function LoginAdmin() {
 
         {/* Footer */}
         <div className="text-center mt-6">
-          <p className="text-gray-500 text-xs">© 2024 Fast Racing Tuning. Todos los derechos reservados.</p>
+          <p className="text-gray-500 text-xs">© 2025 Fast Racing Tuning. Todos los derechos reservados.</p>
         </div>
       </div>
     </div>
