@@ -23,6 +23,8 @@ type Participante = {
 
 export default function AdminPanel() {
   const [participantes, setParticipantes] = useState<Participante[]>([]);
+  const [filtroProducto, setFiltroProducto] = useState("todos");
+  const [filtroEstado, setFiltroEstado] = useState("todos");
 
   useEffect(() => {
     cargarParticipantes();
@@ -64,15 +66,15 @@ export default function AdminPanel() {
       background: "#1f2937", // Fondo gris oscuro
       color: "#ffffff", // Texto blanco
       customClass: {
-        popup: 'fast-racing-popup',
-        title: 'fast-racing-title',
-        htmlContainer: 'fast-racing-text',
-        confirmButton: 'fast-racing-confirm-btn',
-        cancelButton: 'fast-racing-cancel-btn'
+        popup: "fast-racing-popup",
+        title: "fast-racing-title",
+        htmlContainer: "fast-racing-text",
+        confirmButton: "fast-racing-confirm-btn",
+        cancelButton: "fast-racing-cancel-btn",
       },
       didOpen: () => {
         // Inyectar estilos personalizados
-        const style = document.createElement('style');
+        const style = document.createElement("style");
         style.textContent = `
           .fast-racing-popup {
             border: 2px solid #dc2626 !important;
@@ -124,7 +126,7 @@ export default function AdminPanel() {
           }
         `;
         document.head.appendChild(style);
-      }
+      },
     });
 
     if (result.isConfirmed) {
@@ -138,13 +140,13 @@ export default function AdminPanel() {
         confirmButtonColor: "#10b981", // Verde coherente con el ícono
         confirmButtonText: "Continuar",
         customClass: {
-          popup: 'fast-racing-success-popup',
-          title: 'fast-racing-success-title',
-          htmlContainer: 'fast-racing-success-text',
-          confirmButton: 'fast-racing-success-btn'
+          popup: "fast-racing-success-popup",
+          title: "fast-racing-success-title",
+          htmlContainer: "fast-racing-success-text",
+          confirmButton: "fast-racing-success-btn",
         },
         didOpen: () => {
-          const style = document.createElement('style');
+          const style = document.createElement("style");
           style.textContent = `
             .fast-racing-success-popup {
               border: 2px solid #10b981 !important;
@@ -189,7 +191,7 @@ export default function AdminPanel() {
             }
           `;
           document.head.appendChild(style);
-        }
+        },
       }).then(() => {
         window.location.href = "/admin/login";
       });
@@ -231,11 +233,31 @@ export default function AdminPanel() {
     }
   };
 
+  const productosUnicos = Array.from(
+    new Set(participantes.map((p) => p.producto?.nombre))
+  ).filter(Boolean);
+
+  // Obtener estados únicos para el filtro
+  const estadosUnicos = Array.from(
+    new Set(participantes.map((p) => p.estado))
+  ).filter(Boolean);
+
+  // Filtrar participantes según los filtros seleccionados
+  const participantesFiltrados = participantes.filter((p) => {
+    const coincideProducto =
+      filtroProducto === "todos" || p.producto?.nombre === filtroProducto;
+    const coincideEstado =
+      filtroEstado === "todos" || p.estado === filtroEstado;
+    return coincideProducto && coincideEstado;
+  });
+
   return (
     <div className="p-6 bg-gray-900 text-white min-h-screen">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
-        <h1 className="text-3xl font-bold mb-4 sm:mb-0">Panel Administrativo</h1>
-        
+        <h1 className="text-3xl font-bold mb-4 sm:mb-0">
+          Panel Administrativo
+        </h1>
+
         <div className="flex flex-col sm:flex-row gap-3">
           {/* Botón Descargar Excel mejorado */}
           <button
@@ -259,6 +281,40 @@ export default function AdminPanel() {
         </div>
       </div>
 
+      {/* Filtros */}
+      <div className="flex flex-col md:flex-row gap-4 mb-6">
+        <div>
+          <label className="block text-sm mb-1">Filtrar por producto:</label>
+          <select
+            value={filtroProducto}
+            onChange={(e) => setFiltroProducto(e.target.value)}
+            className="bg-gray-800 border border-gray-700 rounded px-3 py-2 text-white"
+          >
+            <option value="todos">Todos</option>
+            {productosUnicos.map((nombre) => (
+              <option key={nombre} value={nombre}>
+                {nombre}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className="block text-sm mb-1">Filtrar por estado:</label>
+          <select
+            value={filtroEstado}
+            onChange={(e) => setFiltroEstado(e.target.value)}
+            className="bg-gray-800 border border-gray-700 rounded px-3 py-2 text-white"
+          >
+            <option value="todos">Todos</option>
+            {estadosUnicos.map((estado) => (
+              <option key={estado} value={estado}>
+                {estado}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
       <table className="w-full text-left border border-gray-700">
         <thead className="bg-gray-800">
           <tr>
@@ -273,7 +329,7 @@ export default function AdminPanel() {
           </tr>
         </thead>
         <tbody>
-          {participantes.map((p) => (
+          {participantesFiltrados.map((p) => (
             <ParticipanteRow
               key={p.id}
               participante={p}
