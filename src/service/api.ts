@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8000";
+const API_URL = "https://sistema-de-rifas-fastapi.onrender.com";
 
 export async function crearParticipante(data: any) {
   const formData = new FormData();
@@ -36,7 +36,7 @@ export async function getParticipantes() {
 }
 
 export async function actualizarEstado(id: number, nuevoEstado: string) {
-    const response = await fetch(`http://localhost:8000/admin/participantes/${id}/estado`, {
+    const response = await fetch(`https://sistema-de-rifas-fastapi.onrender.com/admin/participantes/${id}/estado`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"

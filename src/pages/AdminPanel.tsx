@@ -124,7 +124,7 @@ export default function AdminPanel() {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/participantes/exportar_excel",
+        "https://sistema-de-rifas-fastapi.onrender.com/participantes/exportar_excel",
         {
           method: "GET",
           headers: {

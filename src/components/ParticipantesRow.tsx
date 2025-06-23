@@ -70,7 +70,7 @@ export default function ParticipanteRow({ participante, onUpdate, onDelete }: Pr
     setIsLoadingTicket(true);
     try {
       const response = await fetch(
-        `http://localhost:8000/admin/participantes/${participante.id}/asignar_ticket`,
+        `https://sistema-de-rifas-fastapi.onrender.com/admin/participantes/${participante.id}/asignar_ticket`,
         {
           method: "PUT",
           headers: {
@@ -99,7 +99,7 @@ export default function ParticipanteRow({ participante, onUpdate, onDelete }: Pr
     setIsLoadingEstado(true);
     try {
       const response = await fetch(
-        `http://localhost:8000/admin/participantes/${participante.id}/estado`,
+        `https://sistema-de-rifas-fastapi.onrender.com/admin/participantes/${participante.id}/estado`,
         {
           method: "PUT",
           headers: {
@@ -132,7 +132,7 @@ export default function ParticipanteRow({ participante, onUpdate, onDelete }: Pr
     setIsDeleting(true);
     try {
       const response = await fetch(
-        `http://localhost:8000/admin/participantes/${participante.id}`,
+        `https://sistema-de-rifas-fastapi.onrender.com/admin/participantes/${participante.id}`,
         {
           method: "DELETE",
           headers: {
