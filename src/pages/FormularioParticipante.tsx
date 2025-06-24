@@ -13,7 +13,7 @@ import {
   FileText,
   Hash,
   MapPin,
-  IdCard 
+  IdCard,
 } from "lucide-react";
 import { crearParticipante } from "../service/api";
 import { showSuccess, showError, showLoading } from "../utils/alerts";
@@ -105,11 +105,11 @@ export default function FormularioParticipante() {
       <div className="bg-black/50 backdrop-blur-sm border-b border-red-500/20">
         <div className="max-w-4xl mx-auto px-6 py-4">
           <div className="flex items-center justify-center">
-            <img
+            {/* <img
               src="/logo.jpg"
               alt="Fast Racing Tuning"
               className="h-24 md:h-40 w-auto max-w-xs object-contain mx-auto"
-            />
+            /> */}
           </div>
         </div>
       </div>
@@ -129,98 +129,12 @@ export default function FormularioParticipante() {
           </p>
         </div>
 
-        {/* Instrucciones de Pago */}
-        <div className="bg-gray-800/80 backdrop-blur-sm rounded-2xl border border-gray-700/50 shadow-2xl overflow-hidden mb-8">
-          <div className="bg-gradient-to-r from-red-600 to-red-500 p-6">
-            <h2 className="text-2xl font-bold text-white flex items-center">
-              <CreditCard className="h-6 w-6 mr-3" />
-              Pago vía PayPal
-            </h2>
-          </div>
-
-          <div className="p-6 md:p-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Cuenta */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-red-400">
-                  Datos de la Cuenta
-                </h3>
-                <div className="space-y-2 text-gray-300 text-sm">
-                  <div className="flex justify-between flex-wrap gap-y-1">
-                    <span className="font-medium">Cuenta PayPal:</span>
-                    <span className="font-mono break-all text-right">
-                      faberimport@outlook.com
-                    </span>
-                  </div>
-                  <div className="flex justify-between flex-wrap gap-y-1">
-                    <span className="font-medium">Titular:</span>
-                    <span className="text-right">
-                      Fast Racing Tuning S.R.L.
-                    </span>
-                  </div>
-                  <div className="flex justify-between flex-wrap gap-y-1">
-                    <span className="font-medium">Empresa:</span>
-                    <span className="text-right">FABER IMPORT SRL</span>
-                  </div>
-                  <a
-                    href="https://www.paypal.com/paypalme/faberimportsrl?utm_source=unp&utm_medium=email&utm_campaign=PPC000654&utm_unptid=aae5deb6-a052-11ea-8c08-b875c0fb0ead&ppid=PPC000654&cnac=DO&rsta=es_AG&cust=MT5UDNJ82V73Q&unptid=aae5deb6-a052-11ea-8c08-b875c0fb0ead&calc=3cbaa17ae8d4b&unp_tpcid=ppme-social-business-profile-created&page=main:email:PPC000654:::&pgrp=main:email&e=cl&mchn=em&s=ci&mail=sys&xt=104038"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-block mt-2 text-sm text-red-400 underline hover:text-red-300"
-                  >
-                    Ir al enlace directo de PayPal
-                  </a>
-                </div>
-              </div>
-
-              {/* Detalles */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-red-400">
-                  Detalles del Pago
-                </h3>
-                <div className="bg-red-600/10 border border-red-600/30 rounded-lg p-4">
-                  <div className="text-center">
-                    <p className="text-2xl font-bold text-red-400 mb-2">
-                      USD $35 + comisión PayPal
-                    </p>
-                    <p className="text-sm text-gray-300">
-                      Costo por participación (incluye cargos adicionales)
-                    </p>
-                  </div>
-                </div>
-                <div className="text-sm text-gray-300 space-y-1">
-                  <p>
-                    <strong>Concepto:</strong> Rifa Fast Racing Tuning
-                  </p>
-                  <p>
-                    <strong>Referencia:</strong> Tu nombre completo
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Instrucciones */}
-            <div className="mt-6 p-4 bg-yellow-600/10 border border-yellow-600/30 rounded-lg">
-              <h4 className="text-yellow-400 font-semibold mb-2">
-                📋 Instrucciones Importantes:
-              </h4>
-              <ul className="text-sm text-gray-300 list-disc pl-5 space-y-1">
-                <li>Asegúrate de incluir la comisión extra que cobra PayPal</li>
-                <li>Usa tu nombre completo como referencia del pago</li>
-                <li>Sube el comprobante de pago en el formulario</li>
-                <li>Tu participación será validada tras confirmar el pago</li>
-                <li>Puedes repetir el proceso para adquirir más tickets</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
         {/* Condiciones de la Rifa */}
         <div className="bg-gray-800/80 backdrop-blur-sm rounded-2xl border border-gray-700/50 shadow-2xl overflow-hidden mb-8">
           <div className="bg-gradient-to-r from-red-600 to-red-500 p-6">
             <h2 className="text-2xl font-bold text-white flex items-center">
               <FileText className="h-6 w-6 mr-3" />
-              Condiciones de la Rifa
+              Instrucciones de la rifa
             </h2>
           </div>
 
@@ -257,6 +171,8 @@ export default function FormularioParticipante() {
               8. Solo <strong>100</strong> boletos
               <strong> único </strong> ganador.
             </p>
+            <p>9. Tu participación será validada tras confirmar el pago</p>
+            <p>10. Puedes repetir el proceso para adquirir más tickets</p>
           </div>
         </div>
 
@@ -338,7 +254,7 @@ export default function FormularioParticipante() {
 
             <div className="space-y-2">
               <label className="flex items-center text-sm font-medium text-gray-300 mb-2">
-                <MapPin  className="h-4 w-4 mr-2 text-red-500" />
+                <MapPin className="h-4 w-4 mr-2 text-red-500" />
                 Dirección
               </label>
               <input
@@ -427,6 +343,84 @@ export default function FormularioParticipante() {
               </span>
             </button>
           </form>
+        </div>
+
+        {/* Instrucciones de Pago */}
+        <div className="bg-gray-800/80 backdrop-blur-sm rounded-2xl border border-gray-700/50 shadow-2xl overflow-hidden mb-8 mt-8">
+          <div className="bg-gradient-to-r from-red-600 to-red-500 p-6">
+            <h2 className="text-2xl font-bold text-white flex items-center">
+              <CreditCard className="h-6 w-6 mr-3" />
+              Pago vía PayPal
+            </h2>
+          </div>
+
+          <div className="p-6 md:p-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Cuenta */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-red-400">
+                  Datos de la Cuenta
+                </h3>
+                <div className="space-y-2 text-gray-300 text-sm">
+                  <div className="flex justify-between flex-wrap gap-y-1">
+                    <span className="font-medium">Cuenta PayPal:</span>
+                    <span className="font-mono break-all text-right">
+                      faberimport@outlook.com
+                    </span>
+                  </div>
+                  <div className="flex justify-between flex-wrap gap-y-1">
+                    <span className="font-medium">Titular:</span>
+                    <span className="text-right">FABER IMPORT S.R.L</span>
+                  </div>
+                  <div className="flex justify-between flex-wrap gap-y-1">
+                    <span className="font-medium">Empresa:</span>
+                    <span className="text-right">FABER IMPORT SRL</span>
+                  </div>
+                  <a
+                    href="https://www.paypal.com/paypalme/faberimportsrl?utm_source=unp&utm_medium=email&utm_campaign=PPC000654&utm_unptid=aae5deb6-a052-11ea-8c08-b875c0fb0ead&ppid=PPC000654&cnac=DO&rsta=es_AG&cust=MT5UDNJ82V73Q&unptid=aae5deb6-a052-11ea-8c08-b875c0fb0ead&calc=3cbaa17ae8d4b&unp_tpcid=ppme-social-business-profile-created&page=main:email:PPC000654:::&pgrp=main:email&e=cl&mchn=em&s=ci&mail=sys&xt=104038"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block mt-2 text-sm text-red-400 underline hover:text-red-300"
+                  >
+                    Ir al enlace directo de PayPal
+                  </a>
+                  <h3 className="text-lg font-semibold text-red-400 mt-4">
+                  Cuenta Banreservas
+                </h3>
+                <div className="flex justify-between flex-wrap gap-y-1">
+                    <span className="font-medium">No:</span>
+                    <span className="text-right">015-0019467</span>
+                  </div>
+
+                </div>
+              </div>
+
+              {/* Detalles */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-red-400">
+                  Detalles del Pago
+                </h3>
+                <div className="bg-red-600/10 border border-red-600/30 rounded-lg p-4">
+                  <div className="text-center">
+                    <p className="text-2xl font-bold text-red-400 mb-2">
+                      USD $35 + comisión PayPal
+                    </p>
+                    {/* <p className="text-sm text-gray-300">
+                      Costo por participación (incluye cargos adicionales)
+                    </p> */}
+                  </div>
+                </div>
+                <div className="text-sm text-gray-300 space-y-1">
+                  <p>
+                    <strong>Concepto:</strong> Rifa Fast Racing Tuning
+                  </p>
+                  <p>
+                    <strong>Referencia:</strong> Tu nombre completo
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

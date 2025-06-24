@@ -9,9 +9,6 @@ export default function Footer() {
           {/* Company Info */}
           <div className="space-y-3">
             <h3 className="text-lg font-bold text-red-400">Fast Racing Tuning</h3>
-            <p className="text-gray-300 text-sm leading-relaxed">
-              Tu destino para el mejor tuning automotriz y sorteos exclusivos.
-            </p>
           </div>
 
           {/* Raffle Info */}
@@ -21,7 +18,7 @@ export default function Footer() {
               <span className="text-sm font-medium">Información del Sorteo</span>
             </div>
             <p className="text-gray-300 text-sm">
-              Fecha del sorteo: <span className="text-white font-medium">27 de julio de 2025</span>
+              Fecha del sorteo: <span className="text-white font-medium">Domingo, 3 de agosto de 2025</span>
             </p>
             <div className="flex items-center space-x-2">
               <Shield className="w-4 h-4 text-red-400" />
