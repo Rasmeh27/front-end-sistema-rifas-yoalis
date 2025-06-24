@@ -385,13 +385,12 @@ export default function FormularioParticipante() {
                     Ir al enlace directo de PayPal
                   </a>
                   <h3 className="text-lg font-semibold text-red-400 mt-4">
-                  Cuenta Banreservas
-                </h3>
-                <div className="flex justify-between flex-wrap gap-y-1">
+                    Cuenta Banreservas
+                  </h3>
+                  <div className="flex justify-between flex-wrap gap-y-1">
                     <span className="font-medium">No:</span>
                     <span className="text-right">015-0019467</span>
                   </div>
-
                 </div>
               </div>
 
