@@ -381,10 +381,12 @@ export default function FormularioParticipante() {
               <input
                 type="number"
                 min={1}
+                max={100}
                 value={cantidad}
                 onChange={(e) => setCantidad(parseInt(e.target.value))}
                 required
                 className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-red-500"
+                aria-required
               />
             </div>
 
