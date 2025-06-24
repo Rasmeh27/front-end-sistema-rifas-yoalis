@@ -125,7 +125,7 @@ export default function FormularioParticipante() {
           </div>
           <p className="text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
             ¡Participa en nuestra rifa exclusiva y gana increíbles productos de
-            tuning para tu Taller!
+            chiptuning para tu Taller!
           </p>
         </div>
 
