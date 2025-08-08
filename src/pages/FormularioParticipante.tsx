@@ -435,7 +435,7 @@ export default function FormularioParticipante() {
               <input
                 type="number"
                 min={1}
-                max={100}
+                max={2}
                 value={cantidad}
                 onChange={(e) => setCantidad(parseInt(e.target.value))}
                 required
