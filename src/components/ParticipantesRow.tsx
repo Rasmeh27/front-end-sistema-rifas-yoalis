@@ -82,7 +82,7 @@ export default function ParticipanteRow({
     setIsLoadingTicket(true);
     try {
       const response = await fetch(
-        `http://localhost:8000/admin/participantes/${participante.id}/asignar_ticket`,
+        `https://yaolisbackend.vercel.app/admin/participantes/${participante.id}/asignar_ticket`,
         {
           method: "PUT",
           headers: {
@@ -117,7 +117,7 @@ export default function ParticipanteRow({
     setIsLoadingEstado(true);
     try {
       const response = await fetch(
-        `http://localhost:8000/admin/participantes/${participante.id}/estado`,
+        `https://yaolisbackend.vercel.app/admin/participantes/${participante.id}/estado`,
         {
           method: "PUT",
           headers: {
@@ -201,7 +201,7 @@ export default function ParticipanteRow({
 
     try {
       const response = await fetch(
-        `http://localhost:8000/admin/participantes/${participante.id}`,
+        `https://yaolisbackend.vercel.app/admin/participantes/${participante.id}`,
         {
           method: "DELETE",
           headers: {

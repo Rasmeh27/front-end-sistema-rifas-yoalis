@@ -39,7 +39,7 @@ export default function CrearProductoForm({ onProductoCreado }: { onProductoCrea
 
     try {
       showLoading("Creando producto...");
-      const response = await fetch("http://localhost:8000/admin/productos", {
+      const response = await fetch("https://yaolisbackend.vercel.app/admin/productos", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,

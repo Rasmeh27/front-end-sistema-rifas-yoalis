@@ -37,7 +37,7 @@ export default function ProductoAdminCard({
 
     try {
       const response = await fetch(
-        `http://localhost:8000/admin/productos/${producto.id}`,
+        `https://yaolisbackend.vercel.app/admin/productos/${producto.id}`,
         {
           method: "DELETE",
           headers: {
