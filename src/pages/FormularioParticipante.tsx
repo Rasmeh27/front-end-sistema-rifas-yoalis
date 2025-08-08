@@ -2,7 +2,21 @@
 import type React from "react";
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
-import { Upload, Phone, User, CreditCard, Trophy, FileText, Hash, MapPin, BadgeIcon as IdCard, Sparkles, Check, Star, Gift } from 'lucide-react';
+import {
+  Upload,
+  Phone,
+  User,
+  CreditCard,
+  Trophy,
+  FileText,
+  Hash,
+  MapPin,
+  BadgeIcon as IdCard,
+  Sparkles,
+  Check,
+  Star,
+  Gift,
+} from "lucide-react";
 
 const crearParticipante = async (data: any) => {
   const formData = new FormData();
@@ -29,31 +43,31 @@ const crearParticipante = async (data: any) => {
 
 const showError = (message: string) => {
   return Swal.fire({
-    title: 'Error',
+    title: "Error",
     text: message,
-    icon: 'error',
-    confirmButtonText: 'Entendido',
-    confirmButtonColor: '#ef4444',
-    background: '#ffffff',
-    color: '#1f2937',
+    icon: "error",
+    confirmButtonText: "Entendido",
+    confirmButtonColor: "#ef4444",
+    background: "#ffffff",
+    color: "#1f2937",
     showClass: {
-      popup: 'animate__animated animate__shakeX'
-    }
+      popup: "animate__animated animate__shakeX",
+    },
   });
 };
 
 const showLoading = (message: string) => {
   return Swal.fire({
-    title: 'Procesando...',
+    title: "Procesando...",
     text: message,
     allowOutsideClick: false,
     allowEscapeKey: false,
     showConfirmButton: false,
-    background: '#ffffff',
-    color: '#1f2937',
+    background: "#ffffff",
+    color: "#1f2937",
     didOpen: () => {
       Swal.showLoading(null);
-    }
+    },
   });
 };
 
@@ -113,9 +127,11 @@ export default function FormularioParticipante() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.comprobante) {
-      showError("Debes subir el comprobante de pago para participar en la rifa.");
+      showError(
+        "Debes subir el comprobante de pago para participar en la rifa."
+      );
       return;
     }
 
@@ -126,7 +142,7 @@ export default function FormularioParticipante() {
 
     try {
       showLoading("Registrando tu participación en la rifa...");
-      
+
       const participante = await crearParticipante({
         nombre: formData.nombre,
         apellido: formData.apellido,
@@ -141,12 +157,14 @@ export default function FormularioParticipante() {
       Swal.close();
 
       if (!participante || !participante.id) {
-        showError("No se pudo completar tu registro. Por favor, intenta nuevamente.");
+        showError(
+          "No se pudo completar tu registro. Por favor, intenta nuevamente."
+        );
         return;
       }
 
       await Swal.fire({
-        title: '¡Felicitaciones!',
+        title: "¡Felicitaciones!",
         html: `
           <div class="text-center">
             <div class="text-6xl mb-4">🎉</div>
@@ -160,17 +178,17 @@ export default function FormularioParticipante() {
             </p>
           </div>
         `,
-        icon: 'success',
-        confirmButtonText: '¡Genial!',
-        confirmButtonColor: '#ef4444',
-        background: '#ffffff',
-        color: '#1f2937',
+        icon: "success",
+        confirmButtonText: "¡Genial!",
+        confirmButtonColor: "#ef4444",
+        background: "#ffffff",
+        color: "#1f2937",
         showClass: {
-          popup: 'animate__animated animate__bounceIn'
+          popup: "animate__animated animate__bounceIn",
         },
         customClass: {
-          popup: 'rounded-2xl'
-        }
+          popup: "rounded-2xl",
+        },
       });
 
       // Limpiar formulario
@@ -185,11 +203,12 @@ export default function FormularioParticipante() {
       });
       setCantidad(1);
       setSelectedProduct(null);
-
     } catch (error) {
       Swal.close();
       console.error("Error:", error);
-      showError("Ocurrió un error inesperado al registrar tu participación. Por favor, verifica tus datos e intenta nuevamente.");
+      showError(
+        "Ocurrió un error inesperado al registrar tu participación. Por favor, verifica tus datos e intenta nuevamente."
+      );
     }
   };
 
@@ -204,18 +223,22 @@ export default function FormularioParticipante() {
 
       {/* Header con colores del logo */}
       <div className="relative z-10 bg-black shadow-lg shadow-red-500/20">
-        <div className="max-w-6xl mx-auto px-6 py-6">
-          <div className="flex items-center justify-center">
-            <div className="text-center">
-              <div className="inline-flex items-center justify-center p-4">
-                <Sparkles className="h-8 w-8 text-red-500 mr-2 animate-pulse" />
-                <span className="text-3xl font-bold bg-gradient-to-r from-red-400 via-red-500 to-red-600 bg-clip-text text-transparent">
-                  JUEGA TU SUERTE
-                </span>
-                <Sparkles className="h-8 w-8 text-red-500 ml-2 animate-pulse" />
-              </div>
-            </div>
+        <div className="max-w-6xl mx-auto px-6 py-6 flex items-center justify-between">
+          <div className="inline-flex items-center justify-center p-4">
+            <Sparkles className="h-8 w-8 text-red-500 mr-2 animate-pulse" />
+            <span className="text-3xl font-bold bg-gradient-to-r from-red-400 via-red-500 to-red-600 bg-clip-text text-transparent">
+              JUEGA TU SUERTE
+            </span>
+            <Sparkles className="h-8 w-8 text-red-500 ml-2 animate-pulse" />
           </div>
+          <button
+            type="button"
+            onClick={() => (window.location.href = "/admin/login")}
+            className="inline-flex items-center px-5 py-2 bg-gradient-to-r from-gray-800 via-red-600 to-red-700 text-white font-semibold rounded-xl shadow hover:from-red-700 hover:to-gray-900 transition-all duration-300"
+          >
+            <Star className="h-4 w-4 mr-2 text-yellow-400" />
+            Admin Login
+          </button>
         </div>
       </div>
 
