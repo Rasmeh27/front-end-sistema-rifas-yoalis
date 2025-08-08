@@ -1,89 +1,6 @@
 import { useState } from "react";
-
-// Iconos SVG simples
-const TicketIcon = () => (
-  <svg
-    className="h-4 w-4"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"
-    />
-  </svg>
-);
-
-const TrashIcon = () => (
-  <svg
-    className="h-4 w-4"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-    />
-  </svg>
-);
-
-const CheckIcon = () => (
-  <svg
-    className="h-3 w-3"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M5 13l4 4L19 7"
-    />
-  </svg>
-);
-
-const XIcon = () => (
-  <svg
-    className="h-3 w-3"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M6 18L18 6M6 6l12 12"
-    />
-  </svg>
-);
-
-const ClockIcon = () => (
-  <svg
-    className="h-3 w-3"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-    />
-  </svg>
-);
-
-const LoadingSpinner = () => (
-  <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
-);
+import Swal from "sweetalert2";
+import { Ticket, Trash2, Check, X, Clock, Loader2 } from 'lucide-react';
 
 // Tipos de props
 type Producto = {
@@ -91,7 +8,7 @@ type Producto = {
   nombre: string;
 };
 
-type Ticket = {
+type TicketType = {
   id: number;
   numero: string;
 };
@@ -105,7 +22,7 @@ type Participante = {
   producto: Producto;
   estado: string;
   comprobante: string;
-  tickets: Ticket[]; // ✅ nuevo
+  tickets: TicketType[];
 };
 
 type Props = {
@@ -114,24 +31,58 @@ type Props = {
   onDelete: (id: number) => void;
 };
 
-// ...importaciones e íconos igual que antes (sin cambios)...
-
 export default function ParticipanteRow({
   participante,
   onUpdate,
   onDelete,
 }: Props) {
-  const [tickets, setTickets] = useState<Ticket[]>(participante.tickets || []);
+  const [tickets, setTickets] = useState<TicketType[]>(participante.tickets || []);
   const [estadoActual, setEstadoActual] = useState(participante.estado);
   const [isLoadingTicket, setIsLoadingTicket] = useState(false);
   const [isLoadingEstado, setIsLoadingEstado] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
+  const showNotification = (message: string, type: "success" | "error") => {
+    if (type === "success") {
+      Swal.fire({
+        title: '¡Éxito!',
+        text: message,
+        icon: 'success',
+        timer: 3000,
+        timerProgressBar: true,
+        showConfirmButton: false,
+        toast: true,
+        position: 'top-end',
+        background: '#ffffff',
+        color: '#1f2937',
+        customClass: {
+          popup: 'colored-toast'
+        }
+      });
+    } else {
+      Swal.fire({
+        title: 'Error',
+        text: message,
+        icon: 'error',
+        timer: 4000,
+        timerProgressBar: true,
+        showConfirmButton: false,
+        toast: true,
+        position: 'top-end',
+        background: '#ffffff',
+        color: '#1f2937',
+        customClass: {
+          popup: 'colored-toast'
+        }
+      });
+    }
+  };
+
   const asignarTicket = async () => {
     setIsLoadingTicket(true);
     try {
       const response = await fetch(
-        `https://sistema-de-rifas-fastapi.onrender.com/admin/participantes/${participante.id}/asignar_ticket`,
+        `http://localhost:8000/admin/participantes/${participante.id}/asignar_ticket`,
         {
           method: "PUT",
           headers: {
@@ -166,7 +117,7 @@ export default function ParticipanteRow({
     setIsLoadingEstado(true);
     try {
       const response = await fetch(
-        `https://sistema-de-rifas-fastapi.onrender.com/admin/participantes/${participante.id}/estado`,
+        `http://localhost:8000/admin/participantes/${participante.id}/estado`,
         {
           method: "PUT",
           headers: {
@@ -176,7 +127,6 @@ export default function ParticipanteRow({
           body: JSON.stringify({ nuevo_estado: nuevoEstado }),
         }
       );
-
       const data = await response.json();
       if (response.ok) {
         setEstadoActual(nuevoEstado);
@@ -194,11 +144,64 @@ export default function ParticipanteRow({
   };
 
   const eliminarParticipante = async () => {
-    if (!window.confirm("¿Estás seguro de eliminar este participante?")) return;
+    const result = await Swal.fire({
+      title: '¿Eliminar participante?',
+      html: `
+        <div class="text-center">
+          <div class="text-4xl mb-4">⚠️</div>
+          <p class="text-gray-700 mb-4">
+            ¿Estás seguro de que deseas eliminar a 
+            <strong class="text-red-600">${participante.nombre} ${participante.apellido}</strong>?
+          </p>
+          <div class="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
+            <p class="text-red-700 text-sm">
+              <strong>⚠️ Esta acción no se puede deshacer</strong>
+            </p>
+            <p class="text-red-600 text-xs mt-1">
+              Se eliminarán todos los datos y tickets asociados
+            </p>
+          </div>
+        </div>
+      `,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#ef4444',
+      cancelButtonColor: '#6b7280',
+      background: '#ffffff',
+      color: '#1f2937',
+      reverseButtons: true,
+      focusCancel: true,
+      showClass: {
+        popup: 'animate__animated animate__fadeInDown'
+      },
+      hideClass: {
+        popup: 'animate__animated animate__fadeOutUp'
+      }
+    });
+
+    if (!result.isConfirmed) return;
+
     setIsDeleting(true);
+    
+    // Mostrar loading
+    Swal.fire({
+      title: 'Eliminando...',
+      text: 'Por favor espera mientras eliminamos el participante',
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      showConfirmButton: false,
+      background: '#ffffff',
+      color: '#1f2937',
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+
     try {
       const response = await fetch(
-        `https://sistema-de-rifas-fastapi.onrender.com/admin/participantes/${participante.id}`,
+        `http://localhost:8000/admin/participantes/${participante.id}`,
         {
           method: "DELETE",
           headers: {
@@ -206,39 +209,79 @@ export default function ParticipanteRow({
           },
         }
       );
+
       if (response.ok) {
-        showNotification("Participante eliminado correctamente", "success");
+        await Swal.fire({
+          title: '¡Eliminado!',
+          html: `
+            <div class="text-center">
+              <div class="text-4xl mb-4">✅</div>
+              <p class="text-gray-700">
+                El participante <strong class="text-red-600">${participante.nombre} ${participante.apellido}</strong> 
+                ha sido eliminado correctamente.
+              </p>
+            </div>
+          `,
+          icon: 'success',
+          confirmButtonText: 'Entendido',
+          confirmButtonColor: '#ef4444',
+          background: '#ffffff',
+          color: '#1f2937',
+          timer: 3000,
+          timerProgressBar: true,
+          showClass: {
+            popup: 'animate__animated animate__bounceIn'
+          }
+        });
         onDelete(participante.id);
       } else {
-        showNotification("Error al eliminar participante", "error");
+        Swal.fire({
+          title: 'Error al eliminar',
+          text: 'No se pudo eliminar el participante. Por favor, intenta nuevamente.',
+          icon: 'error',
+          confirmButtonText: 'Entendido',
+          confirmButtonColor: '#ef4444',
+          background: '#ffffff',
+          color: '#1f2937'
+        });
       }
     } catch (error) {
       console.error("Error:", error);
-      showNotification("Error de conexión", "error");
+      Swal.fire({
+        title: 'Error de conexión',
+        text: 'No se pudo conectar con el servidor. Verifica tu conexión e intenta nuevamente.',
+        icon: 'error',
+        confirmButtonText: 'Entendido',
+        confirmButtonColor: '#ef4444',
+        background: '#ffffff',
+        color: '#1f2937'
+      });
     } finally {
       setIsDeleting(false);
     }
-  };
-
-  const showNotification = (message: string, type: "success" | "error") => {
-    const notification = document.createElement("div");
-    notification.className = `fixed top-4 right-4 z-50 px-4 py-2 rounded-lg text-white font-medium transition-all duration-300 ${
-      type === "success" ? "bg-green-600" : "bg-red-600"
-    }`;
-    notification.textContent = message;
-    document.body.appendChild(notification);
-    setTimeout(() => notification.remove(), 3000);
   };
 
   const getEstadoLabel = (estado: string) => {
     const base = "inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-full";
     switch (estado.toLowerCase()) {
       case "aprobado":
-        return <span className={`${base} bg-green-600/20 text-green-400 border border-green-600/30`}><CheckIcon /> Aprobado</span>;
+        return (
+          <span className={`${base} bg-green-100 text-green-800 border border-green-200`}>
+            <Check className="h-3 w-3" /> Aprobado
+          </span>
+        );
       case "rechazado":
-        return <span className={`${base} bg-red-600/20 text-red-400 border border-red-600/30`}><XIcon /> Rechazado</span>;
+        return (
+          <span className={`${base} bg-red-100 text-red-800 border border-red-200`}>
+            <X className="h-3 w-3" /> Rechazado
+          </span>
+        );
       default:
-        return <span className={`${base} bg-yellow-600/20 text-yellow-400 border border-yellow-600/30`}><ClockIcon /> Pendiente</span>;
+        return (
+          <span className={`${base} bg-yellow-100 text-yellow-800 border border-yellow-200`}>
+            <Clock className="h-3 w-3" /> Pendiente
+          </span>
+        );
     }
   };
 
@@ -247,25 +290,36 @@ export default function ParticipanteRow({
   };
 
   return (
-    <tr className="border-t border-gray-700/50 hover:bg-gray-800/30 transition-colors duration-200">
-      <td className="p-4 text-gray-300 font-mono text-sm">#{participante.id}</td>
-      <td className="p-4 text-white font-medium">{participante.nombre} {participante.apellido}</td>
-      <td className="p-4 text-gray-300 font-mono text-sm">{participante.cedula}</td>
-      <td className="p-4 text-gray-300 font-mono text-sm">{participante.numero_telefono}</td>
-      <td className="p-4">
-        <span className="inline-block px-2 py-1 bg-gray-700 text-gray-300 rounded text-sm">
+    <>
+      <td className="p-4 text-gray-600 font-mono text-sm border-b border-gray-200">
+        #{participante.id}
+      </td>
+      <td className="p-4 text-gray-900 font-medium border-b border-gray-200">
+        {participante.nombre} {participante.apellido}
+      </td>
+      <td className="p-4 text-gray-600 font-mono text-sm border-b border-gray-200">
+        {participante.cedula}
+      </td>
+      <td className="p-4 text-gray-600 font-mono text-sm border-b border-gray-200">
+        {participante.numero_telefono}
+      </td>
+      <td className="p-4 border-b border-gray-200">
+        <span className="inline-block px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm font-medium">
           {participante.producto?.nombre || "Sin producto"}
         </span>
       </td>
-
-      {/* ✅ TICKETS */}
-      <td className="p-4">
+      
+      {/* TICKETS */}
+      <td className="p-4 border-b border-gray-200">
         {tickets.length > 0 ? (
           <div className="flex flex-wrap gap-2">
             {tickets.map((t) => (
-              <div key={t.id} className="inline-flex items-center gap-2 px-3 py-1 bg-red-600/20 border border-red-600/30 rounded-lg">
-                <TicketIcon />
-                <span className="text-red-400 font-mono font-semibold">#{t.numero}</span>
+              <div 
+                key={t.id} 
+                className="inline-flex items-center gap-2 px-3 py-1 bg-red-100 border border-red-200 rounded-lg"
+              >
+                <Ticket className="h-4 w-4 text-red-600" />
+                <span className="text-red-800 font-mono font-semibold">#{t.numero}</span>
               </div>
             ))}
           </div>
@@ -273,19 +327,29 @@ export default function ParticipanteRow({
           <button
             onClick={asignarTicket}
             disabled={isLoadingTicket}
-            className="inline-flex items-center gap-2 px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors duration-200 text-sm font-medium disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors duration-200 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {isLoadingTicket ? <><LoadingSpinner /> Asignando...</> : <><TicketIcon /> Asignar Tickets</>}
+            {isLoadingTicket ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" /> 
+                Asignando...
+              </>
+            ) : (
+              <>
+                <Ticket className="h-4 w-4" /> 
+                Asignar Tickets
+              </>
+            )}
           </button>
         )}
       </td>
 
-      {/* ✅ ESTADO */}
-      <td className="p-4">
-        <div className="flex items-center gap-2">
+      {/* ESTADO */}
+      <td className="p-4 border-b border-gray-200">
+        <div className="flex items-center gap-3">
           {getEstadoLabel(estadoActual)}
           <select
-            className="bg-gray-700 border border-gray-600 text-white px-2 py-1 rounded text-sm focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="bg-white border border-gray-300 text-gray-900 px-3 py-1 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors"
             value={estadoActual}
             onChange={(e) => cambiarEstado(e.target.value)}
             disabled={isLoadingEstado}
@@ -297,15 +361,15 @@ export default function ParticipanteRow({
         </div>
       </td>
 
-      {/* ✅ COMPROBANTE */}
-      <td className="p-4">
+      {/* COMPROBANTE */}
+      <td className="p-4 border-b border-gray-200">
         {participante.comprobante ? (
           isImage(participante.comprobante) ? (
             <div className="relative group">
               <img
                 src={`data:image/png;base64,${participante.comprobante}`}
                 alt="Comprobante"
-                className="h-12 w-12 object-cover rounded-lg border border-gray-600 cursor-pointer hover:scale-110 transition-transform duration-200"
+                className="h-12 w-12 object-cover rounded-lg border-2 border-gray-200 cursor-pointer hover:border-red-300 hover:scale-110 transition-all duration-200 shadow-sm"
                 onClick={() => {
                   const newWindow = window.open();
                   if (newWindow) {
@@ -315,7 +379,7 @@ export default function ParticipanteRow({
                   }
                 }}
               />
-              <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+              <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
                 Click para ampliar
               </div>
             </div>
@@ -324,26 +388,36 @@ export default function ParticipanteRow({
               href={`data:application/pdf;base64,${participante.comprobante}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-400 underline"
+              className="text-red-600 hover:text-red-800 underline font-medium"
             >
               Ver PDF
             </a>
           )
         ) : (
-          <span className="text-gray-500 text-sm italic">Sin comprobante</span>
+          <span className="text-gray-400 text-sm italic">Sin comprobante</span>
         )}
       </td>
 
-      {/* ✅ ACCIONES */}
-      <td className="p-4">
+      {/* ACCIONES */}
+      <td className="p-4 border-b border-gray-200">
         <button
           onClick={eliminarParticipante}
           disabled={isDeleting}
-          className="inline-flex items-center gap-2 px-3 py-2 bg-red-600/20 hover:bg-red-600 border border-red-600/30 hover:border-red-600 text-red-400 hover:text-white rounded-lg transition-all duration-200 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-50"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-red-100 hover:bg-red-500 border border-red-200 hover:border-red-500 text-red-600 hover:text-white rounded-lg transition-all duration-200 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {isDeleting ? <><LoadingSpinner /> Eliminando...</> : <><TrashIcon /> Eliminar</>}
+          {isDeleting ? (
+            <>
+              <Loader2 className="h-4 w-4 animate-spin" /> 
+              Eliminando...
+            </>
+          ) : (
+            <>
+              <Trash2 className="h-4 w-4" /> 
+              Eliminar
+            </>
+          )}
         </button>
       </td>
-    </tr>
+    </>
   );
 }
