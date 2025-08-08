@@ -60,7 +60,7 @@ export default function AdminPanel() {
   const cargarProductos = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:8000/admin/productos", {
+      const res = await fetch("https://yaolisbackend.vercel.app/admin/productos", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -115,7 +115,7 @@ export default function AdminPanel() {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/participantes/exportar_excel",
+        "https://yaolisbackend.vercel.app/participantes/exportar_excel",
         {
           method: "GET",
           headers: {

@@ -29,7 +29,7 @@ const crearParticipante = async (data: any) => {
   formData.append("comprobante", data.comprobante);
   formData.append("cantidad_numeros", String(data.cantidad_numeros));
 
-  const response = await fetch("http://localhost:8000/participantes", {
+  const response = await fetch("https://yaolisbackend.vercel.app/participantes", {
     method: "POST",
     body: formData,
   });
@@ -89,7 +89,7 @@ export default function FormularioParticipante() {
   useEffect(() => {
     const obtenerProductos = async () => {
       try {
-        const res = await fetch("http://localhost:8000/productos/disponibles");
+        const res = await fetch("https://yaolisbackend.vercel.app/productos/disponibles");
         const data = await res.json();
         setProductos(data);
       } catch (error) {
