@@ -104,7 +104,7 @@ export default function AdminPanel() {
         color: "#1f2937",
         confirmButtonColor: "#ef4444",
       }).then(() => {
-        window.location.href = "/admin/login";
+        window.location.href = "/";
       });
     }
   };
