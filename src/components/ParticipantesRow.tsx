@@ -195,7 +195,7 @@ export default function ParticipanteRow({
       background: '#ffffff',
       color: '#1f2937',
       didOpen: () => {
-        Swal.showLoading();
+        Swal.showLoading(null); 
       }
     });
 

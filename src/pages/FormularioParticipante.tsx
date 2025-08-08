@@ -2,7 +2,7 @@
 import type React from "react";
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
-import { Upload, Car, Phone, User, Package, CreditCard, Trophy, FileText, Hash, MapPin, BadgeIcon as IdCard, Sparkles, Zap, Check, Star, Gift } from 'lucide-react';
+import { Upload, Phone, User, CreditCard, Trophy, FileText, Hash, MapPin, BadgeIcon as IdCard, Sparkles, Check, Star, Gift } from 'lucide-react';
 
 const crearParticipante = async (data: any) => {
   const formData = new FormData();
@@ -25,24 +25,6 @@ const crearParticipante = async (data: any) => {
   }
 
   return await response.json();
-};
-
-const showSuccess = (message: string) => {
-  return Swal.fire({
-    title: '¡Éxito!',
-    text: message,
-    icon: 'success',
-    confirmButtonText: 'Continuar',
-    confirmButtonColor: '#ef4444',
-    background: '#ffffff',
-    color: '#1f2937',
-    showClass: {
-      popup: 'animate__animated animate__fadeInDown'
-    },
-    hideClass: {
-      popup: 'animate__animated animate__fadeOutUp'
-    }
-  });
 };
 
 const showError = (message: string) => {
@@ -70,7 +52,7 @@ const showLoading = (message: string) => {
     background: '#ffffff',
     color: '#1f2937',
     didOpen: () => {
-      Swal.showLoading();
+      Swal.showLoading(null);
     }
   });
 };
