@@ -588,7 +588,7 @@ export default function FormularioParticipante() {
                   <div className="flex justify-between flex-wrap gap-y-1">
                     <span className="font-medium text-red-600">Telefono:</span>
                     <span className="text-right text-gray-900 font-mono">
-                      0424.296.23.98
+                      +58 424-2962398
                     </span>
                   </div>
                 </div>

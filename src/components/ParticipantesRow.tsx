@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Swal from "sweetalert2";
 import { Ticket, Trash2, Check, X, Clock, Loader2 } from "lucide-react";
+import { enviarCorreoAprobacion } from "../service/emailService";
 
 // Tipos de props
 type Producto = {
@@ -81,38 +82,40 @@ export default function ParticipanteRow({
     }
   };
 
-  const asignarTicket = async () => {
+  const asignarTicket = async (): Promise<string[] | null> => {
     setIsLoadingTicket(true);
     try {
       const response = await fetch(
         `https://yaolisbackend.vercel.app/admin/participantes/${participante.id}/asignar_ticket`,
         {
           method: "PUT",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
       const data = await response.json();
-      if (response.ok) {
-        if (Array.isArray(data.numeros_asignados)) {
-          const nuevosTickets = data.numeros_asignados.map(
-            (num: string, i: number) => ({
-              id: Date.now() + i,
-              numero: num,
-            })
-          );
-          setTickets(nuevosTickets);
-          showNotification("Tickets asignados correctamente", "success");
-        } else {
-          showNotification("Respuesta inesperada del servidor", "error");
-        }
-      } else {
+
+      if (!response.ok) {
         showNotification(data.detail || "Error al asignar tickets", "error");
+        return null;
       }
+      if (!Array.isArray(data.numeros_asignados)) {
+        showNotification("Respuesta inesperada del servidor", "error");
+        return null;
+      }
+
+      const nuevosTickets = data.numeros_asignados.map(
+        (num: string, i: number) => ({
+          id: Date.now() + i,
+          numero: num,
+        })
+      );
+      setTickets(nuevosTickets);
+      showNotification("Tickets asignados correctamente", "success");
+      return data.numeros_asignados as string[];
     } catch (error) {
       console.error("Error:", error);
       showNotification("Error de conexión con el servidor", "error");
+      return null;
     } finally {
       setIsLoadingTicket(false);
     }
@@ -133,13 +136,52 @@ export default function ParticipanteRow({
         }
       );
       const data = await response.json();
-      if (response.ok) {
-        setEstadoActual(nuevoEstado);
-        showNotification("Estado actualizado correctamente", "success");
-        onUpdate();
-      } else {
+
+      if (!response.ok) {
         showNotification(data.detail || "Error al cambiar estado", "error");
+        return;
       }
+
+      setEstadoActual(nuevoEstado);
+      showNotification("Estado actualizado correctamente", "success");
+      onUpdate();
+
+      // ===== EmailJS al aprobar =====
+      if (nuevoEstado.toLowerCase() === "aprobado") {
+        // 1) Asegurar/obtener números
+        let numeros = tickets.map((t) => t.numero);
+        if (numeros.length === 0) {
+          const asignados = await asignarTicket(); // asigna si no hay
+          if (!asignados || asignados.length === 0) {
+            showNotification("No hay tickets para enviar por correo.", "error");
+            return;
+          }
+          numeros = asignados;
+        }
+
+        // 2) Enviar correo
+        if (!participante.email) {
+          showNotification(
+            "Participante sin email. No se pudo enviar correo.",
+            "error"
+          );
+          return;
+        }
+
+        try {
+          await enviarCorreoAprobacion({
+            to_email: participante.email,
+            participant_name: `${participante.nombre} ${participante.apellido}`,
+            numeros,
+            producto: participante.producto?.nombre,
+          });
+          showNotification("Correo enviado con los números ✅", "success");
+        } catch (e) {
+          console.error(e);
+          showNotification("Aprobado, pero falló el envío de correo.", "error");
+        }
+      }
+      // ==============================
     } catch (error) {
       console.error("Error:", error);
       showNotification("Error de conexión", "error");
