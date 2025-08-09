@@ -25,19 +25,23 @@ const crearParticipante = async (data: any) => {
   formData.append("cedula", data.cedula);
   formData.append("numero_telefono", data.telefono);
   formData.append("direccion", data.direccion);
+  formData.append("email", data.email); // 👈 NEW
   formData.append("producto_id", data.producto_id.toString());
   formData.append("comprobante", data.comprobante);
   formData.append("cantidad_numeros", String(data.cantidad_numeros));
 
-  const response = await fetch("https://yaolisbackend.vercel.app/participantes", {
-    method: "POST",
-    body: formData,
-  });
+  const response = await fetch(
+    "https://yaolisbackend.vercel.app/participantes",
+    {
+      method: "POST",
+      body: formData,
+    }
+  );
 
   if (!response.ok) {
-    throw new Error("No se pudo registrar el participante");
+    const txt = await response.text().catch(() => "");
+    throw new Error(txt || "No se pudo registrar el participante");
   }
-
   return await response.json();
 };
 
@@ -78,10 +82,11 @@ export default function FormularioParticipante() {
     cedula: "",
     telefono: "",
     direccion: "",
+    email: "",
     producto: "",
     comprobante: null as File | null,
   });
-  const [cantidad, setCantidad] = useState(1);
+  const [cantidad, setCantidad] = useState(2);
   const [productos, setProductos] = useState<any[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
 
@@ -89,7 +94,9 @@ export default function FormularioParticipante() {
   useEffect(() => {
     const obtenerProductos = async () => {
       try {
-        const res = await fetch("https://yaolisbackend.vercel.app/productos/disponibles");
+        const res = await fetch(
+          "https://yaolisbackend.vercel.app/productos/disponibles"
+        );
         const data = await res.json();
         setProductos(data);
       } catch (error) {
@@ -140,6 +147,18 @@ export default function FormularioParticipante() {
       return;
     }
 
+    // Validacion de Email 
+    const email10k = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email || "");
+    if (!email10k) {
+      showError("Por favor, ingresa un correo electrónico válido.");
+      return;
+    }
+
+    if (cantidad < 2 || cantidad % 2 !== 0) {
+      showError("La cantidad de números debe ser al menos 2 y un número par.");
+      return;
+    }
+
     try {
       showLoading("Registrando tu participación en la rifa...");
 
@@ -149,6 +168,7 @@ export default function FormularioParticipante() {
         cedula: formData.cedula,
         telefono: formData.telefono,
         direccion: formData.direccion,
+        email: formData.email,
         producto_id: parseInt(formData.producto),
         comprobante: formData.comprobante,
         cantidad_numeros: cantidad,
@@ -199,9 +219,10 @@ export default function FormularioParticipante() {
         telefono: "",
         direccion: "",
         producto: "",
+        email: "",
         comprobante: null,
       });
-      setCantidad(1);
+      setCantidad(2);
       setSelectedProduct(null);
     } catch (error) {
       Swal.close();
@@ -422,6 +443,22 @@ export default function FormularioParticipante() {
             </div>
             <div className="space-y-2 group">
               <label className="flex items-center text-sm font-medium text-gray-700 mb-2 group-hover:text-red-600 transition-colors">
+                <User className="h-4 w-4 mr-2 text-red-500 group-hover:drop-shadow-[0_0_5px_rgba(239,68,68,0.8)]" />
+                Correo electrónico
+              </label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                required
+                className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 focus:shadow-[0_0_20px_rgba(239,68,68,0.2)] transition-all duration-300"
+                placeholder="tucorreo@ejemplo.com"
+              />
+            </div>
+
+            <div className="space-y-2 group">
+              <label className="flex items-center text-sm font-medium text-gray-700 mb-2 group-hover:text-red-600 transition-colors">
                 <Phone className="h-4 w-4 mr-2 text-red-500 group-hover:drop-shadow-[0_0_5px_rgba(239,68,68,0.8)]" />
                 Número de Teléfono
               </label>
@@ -457,8 +494,8 @@ export default function FormularioParticipante() {
               </label>
               <input
                 type="number"
-                min={1}
-                max={2}
+                min={2}
+                step={2}
                 value={cantidad}
                 onChange={(e) => setCantidad(parseInt(e.target.value))}
                 required

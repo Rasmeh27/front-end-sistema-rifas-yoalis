@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Swal from "sweetalert2";
-import { Ticket, Trash2, Check, X, Clock, Loader2 } from 'lucide-react';
+import { Ticket, Trash2, Check, X, Clock, Loader2 } from "lucide-react";
 
 // Tipos de props
 type Producto = {
@@ -19,6 +19,7 @@ type Participante = {
   apellido: string;
   cedula: string;
   numero_telefono: string;
+  email: string;
   producto: Producto;
   estado: string;
   comprobante: string;
@@ -36,7 +37,9 @@ export default function ParticipanteRow({
   onUpdate,
   onDelete,
 }: Props) {
-  const [tickets, setTickets] = useState<TicketType[]>(participante.tickets || []);
+  const [tickets, setTickets] = useState<TicketType[]>(
+    participante.tickets || []
+  );
   const [estadoActual, setEstadoActual] = useState(participante.estado);
   const [isLoadingTicket, setIsLoadingTicket] = useState(false);
   const [isLoadingEstado, setIsLoadingEstado] = useState(false);
@@ -45,35 +48,35 @@ export default function ParticipanteRow({
   const showNotification = (message: string, type: "success" | "error") => {
     if (type === "success") {
       Swal.fire({
-        title: '¡Éxito!',
+        title: "¡Éxito!",
         text: message,
-        icon: 'success',
+        icon: "success",
         timer: 3000,
         timerProgressBar: true,
         showConfirmButton: false,
         toast: true,
-        position: 'top-end',
-        background: '#ffffff',
-        color: '#1f2937',
+        position: "top-end",
+        background: "#ffffff",
+        color: "#1f2937",
         customClass: {
-          popup: 'colored-toast'
-        }
+          popup: "colored-toast",
+        },
       });
     } else {
       Swal.fire({
-        title: 'Error',
+        title: "Error",
         text: message,
-        icon: 'error',
+        icon: "error",
         timer: 4000,
         timerProgressBar: true,
         showConfirmButton: false,
         toast: true,
-        position: 'top-end',
-        background: '#ffffff',
-        color: '#1f2937',
+        position: "top-end",
+        background: "#ffffff",
+        color: "#1f2937",
         customClass: {
-          popup: 'colored-toast'
-        }
+          popup: "colored-toast",
+        },
       });
     }
   };
@@ -93,10 +96,12 @@ export default function ParticipanteRow({
       const data = await response.json();
       if (response.ok) {
         if (Array.isArray(data.numeros_asignados)) {
-          const nuevosTickets = data.numeros_asignados.map((num: string, i: number) => ({
-            id: Date.now() + i,
-            numero: num,
-          }));
+          const nuevosTickets = data.numeros_asignados.map(
+            (num: string, i: number) => ({
+              id: Date.now() + i,
+              numero: num,
+            })
+          );
           setTickets(nuevosTickets);
           showNotification("Tickets asignados correctamente", "success");
         } else {
@@ -145,7 +150,7 @@ export default function ParticipanteRow({
 
   const eliminarParticipante = async () => {
     const result = await Swal.fire({
-      title: '¿Eliminar participante?',
+      title: "¿Eliminar participante?",
       html: `
         <div class="text-center">
           <div class="text-4xl mb-4">⚠️</div>
@@ -163,40 +168,40 @@ export default function ParticipanteRow({
           </div>
         </div>
       `,
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonText: 'Sí, eliminar',
-      cancelButtonText: 'Cancelar',
-      confirmButtonColor: '#ef4444',
-      cancelButtonColor: '#6b7280',
-      background: '#ffffff',
-      color: '#1f2937',
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: "#ef4444",
+      cancelButtonColor: "#6b7280",
+      background: "#ffffff",
+      color: "#1f2937",
       reverseButtons: true,
       focusCancel: true,
       showClass: {
-        popup: 'animate__animated animate__fadeInDown'
+        popup: "animate__animated animate__fadeInDown",
       },
       hideClass: {
-        popup: 'animate__animated animate__fadeOutUp'
-      }
+        popup: "animate__animated animate__fadeOutUp",
+      },
     });
 
     if (!result.isConfirmed) return;
 
     setIsDeleting(true);
-    
+
     // Mostrar loading
     Swal.fire({
-      title: 'Eliminando...',
-      text: 'Por favor espera mientras eliminamos el participante',
+      title: "Eliminando...",
+      text: "Por favor espera mientras eliminamos el participante",
       allowOutsideClick: false,
       allowEscapeKey: false,
       showConfirmButton: false,
-      background: '#ffffff',
-      color: '#1f2937',
+      background: "#ffffff",
+      color: "#1f2937",
       didOpen: () => {
-        Swal.showLoading(null); 
-      }
+        Swal.showLoading(null);
+      },
     });
 
     try {
@@ -212,7 +217,7 @@ export default function ParticipanteRow({
 
       if (response.ok) {
         await Swal.fire({
-          title: '¡Eliminado!',
+          title: "¡Eliminado!",
           html: `
             <div class="text-center">
               <div class="text-4xl mb-4">✅</div>
@@ -222,39 +227,39 @@ export default function ParticipanteRow({
               </p>
             </div>
           `,
-          icon: 'success',
-          confirmButtonText: 'Entendido',
-          confirmButtonColor: '#ef4444',
-          background: '#ffffff',
-          color: '#1f2937',
+          icon: "success",
+          confirmButtonText: "Entendido",
+          confirmButtonColor: "#ef4444",
+          background: "#ffffff",
+          color: "#1f2937",
           timer: 3000,
           timerProgressBar: true,
           showClass: {
-            popup: 'animate__animated animate__bounceIn'
-          }
+            popup: "animate__animated animate__bounceIn",
+          },
         });
         onDelete(participante.id);
       } else {
         Swal.fire({
-          title: 'Error al eliminar',
-          text: 'No se pudo eliminar el participante. Por favor, intenta nuevamente.',
-          icon: 'error',
-          confirmButtonText: 'Entendido',
-          confirmButtonColor: '#ef4444',
-          background: '#ffffff',
-          color: '#1f2937'
+          title: "Error al eliminar",
+          text: "No se pudo eliminar el participante. Por favor, intenta nuevamente.",
+          icon: "error",
+          confirmButtonText: "Entendido",
+          confirmButtonColor: "#ef4444",
+          background: "#ffffff",
+          color: "#1f2937",
         });
       }
     } catch (error) {
       console.error("Error:", error);
       Swal.fire({
-        title: 'Error de conexión',
-        text: 'No se pudo conectar con el servidor. Verifica tu conexión e intenta nuevamente.',
-        icon: 'error',
-        confirmButtonText: 'Entendido',
-        confirmButtonColor: '#ef4444',
-        background: '#ffffff',
-        color: '#1f2937'
+        title: "Error de conexión",
+        text: "No se pudo conectar con el servidor. Verifica tu conexión e intenta nuevamente.",
+        icon: "error",
+        confirmButtonText: "Entendido",
+        confirmButtonColor: "#ef4444",
+        background: "#ffffff",
+        color: "#1f2937",
       });
     } finally {
       setIsDeleting(false);
@@ -262,23 +267,30 @@ export default function ParticipanteRow({
   };
 
   const getEstadoLabel = (estado: string) => {
-    const base = "inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-full";
+    const base =
+      "inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-full";
     switch (estado.toLowerCase()) {
       case "aprobado":
         return (
-          <span className={`${base} bg-green-100 text-green-800 border border-green-200`}>
+          <span
+            className={`${base} bg-green-100 text-green-800 border border-green-200`}
+          >
             <Check className="h-3 w-3" /> Aprobado
           </span>
         );
       case "rechazado":
         return (
-          <span className={`${base} bg-red-100 text-red-800 border border-red-200`}>
+          <span
+            className={`${base} bg-red-100 text-red-800 border border-red-200`}
+          >
             <X className="h-3 w-3" /> Rechazado
           </span>
         );
       default:
         return (
-          <span className={`${base} bg-yellow-100 text-yellow-800 border border-yellow-200`}>
+          <span
+            className={`${base} bg-yellow-100 text-yellow-800 border border-yellow-200`}
+          >
             <Clock className="h-3 w-3" /> Pendiente
           </span>
         );
@@ -286,7 +298,11 @@ export default function ParticipanteRow({
   };
 
   const isImage = (base64: string) => {
-    return base64.startsWith("/") || base64.startsWith("iVBOR") || base64.startsWith("/9j/");
+    return (
+      base64.startsWith("/") ||
+      base64.startsWith("iVBOR") ||
+      base64.startsWith("/9j/")
+    );
   };
 
   return (
@@ -303,23 +319,38 @@ export default function ParticipanteRow({
       <td className="p-4 text-gray-600 font-mono text-sm border-b border-gray-200">
         {participante.numero_telefono}
       </td>
+      <td className="p-4 text-gray-600 text-sm border-b border-gray-200 max-w-[220px]">
+        {participante.email ? (
+          <a
+            href={`mailto:${participante.email}`}
+            className="text-red-600 hover:text-red-800 underline break-all"
+            title={participante.email}
+          >
+            {participante.email}
+          </a>
+        ) : (
+          <span className="text-gray-400 italic">Sin email</span>
+        )}
+      </td>
       <td className="p-4 border-b border-gray-200">
         <span className="inline-block px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm font-medium">
           {participante.producto?.nombre || "Sin producto"}
         </span>
       </td>
-      
+
       {/* TICKETS */}
       <td className="p-4 border-b border-gray-200">
         {tickets.length > 0 ? (
           <div className="flex flex-wrap gap-2">
             {tickets.map((t) => (
-              <div 
-                key={t.id} 
+              <div
+                key={t.id}
                 className="inline-flex items-center gap-2 px-3 py-1 bg-red-100 border border-red-200 rounded-lg"
               >
                 <Ticket className="h-4 w-4 text-red-600" />
-                <span className="text-red-800 font-mono font-semibold">#{t.numero}</span>
+                <span className="text-red-800 font-mono font-semibold">
+                  #{t.numero}
+                </span>
               </div>
             ))}
           </div>
@@ -331,12 +362,12 @@ export default function ParticipanteRow({
           >
             {isLoadingTicket ? (
               <>
-                <Loader2 className="h-4 w-4 animate-spin" /> 
+                <Loader2 className="h-4 w-4 animate-spin" />
                 Asignando...
               </>
             ) : (
               <>
-                <Ticket className="h-4 w-4" /> 
+                <Ticket className="h-4 w-4" />
                 Asignar Tickets
               </>
             )}
@@ -407,12 +438,12 @@ export default function ParticipanteRow({
         >
           {isDeleting ? (
             <>
-              <Loader2 className="h-4 w-4 animate-spin" /> 
+              <Loader2 className="h-4 w-4 animate-spin" />
               Eliminando...
             </>
           ) : (
             <>
-              <Trash2 className="h-4 w-4" /> 
+              <Trash2 className="h-4 w-4" />
               Eliminar
             </>
           )}

@@ -25,6 +25,7 @@ type Participante = {
   apellido: string;
   cedula: string;
   numero_telefono: string;
+  email: string;
   producto: Producto;
   cantidad_numeros: number;
   estado: string;
@@ -261,6 +262,7 @@ export default function AdminPanel() {
                 <th className="p-4 font-semibold text-gray-900">Nombre</th>
                 <th className="p-4 font-semibold text-gray-900">Cédula</th>
                 <th className="p-4 font-semibold text-gray-900">Teléfono</th>
+                <th className="p-4 font-semibold text-gray-900">Email</th>
                 <th className="p-4 font-semibold text-gray-900">Producto</th>
                 <th className="p-4 font-semibold text-gray-900">Tickets</th>
                 <th className="p-4 font-semibold text-gray-900">Estado</th>
