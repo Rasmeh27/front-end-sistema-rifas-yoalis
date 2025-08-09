@@ -170,11 +170,13 @@ export default function ParticipanteRow({
 
         try {
           await enviarCorreoAprobacion({
-            email: participante.email,
-            participant_name: `${participante.nombre} ${participante.apellido}`,
-            numeros,
-            producto: participante.producto?.nombre,
+            email: participante.email, // To Email -> {{email}}
+            participant_name: `${participante.nombre} ${participante.apellido}`, // {{participant_name}}
+            numeros, // array de tickets -> {{#orders}}{{.}}{{/orders}}
+            producto: participante.producto?.nombre, // {{producto}} (opcional)
+            order_id: participante.id, // {{order_id}}
           });
+
           showNotification("Correo enviado con los números ✅", "success");
         } catch (e) {
           console.error(e);
