@@ -1,24 +1,22 @@
 import emailjs from "@emailjs/browser";
 
 export async function enviarCorreoAprobacion(params: {
-  email: string;
-  participant_name: string;
-  numeros: (string | number)[];
+  email: string;                 // destinatario
+  participant_name: string;      // {{participant_name}} en template
+  numeros: (string | number)[];  // {{numeros}} en template
   producto?: string;
 }) {
   const serviceId  = import.meta.env.VITE_EMAILJS_SERVICE_ID!;
   const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID!;
   const publicKey  = import.meta.env.VITE_EMAILJS_PUBLIC_KEY!;
 
-  const numerosTexto = params.numeros.map(String).join(", ");
-
   return emailjs.send(
     serviceId,
     templateId,
     {
-      to_email: params.email,
+      email: params.email,                               // 👈 clave que resuelve el "To Email"
       participant_name: params.participant_name,
-      numeros: numerosTexto,
+      numeros: params.numeros.map(String).join(", "),
       producto: params.producto ?? "",
     },
     { publicKey }
