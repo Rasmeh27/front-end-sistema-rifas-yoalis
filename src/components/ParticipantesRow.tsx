@@ -170,7 +170,7 @@ export default function ParticipanteRow({
 
         try {
           await enviarCorreoAprobacion({
-            to_email: participante.email,
+            email: participante.email,
             participant_name: `${participante.nombre} ${participante.apellido}`,
             numeros,
             producto: participante.producto?.nombre,

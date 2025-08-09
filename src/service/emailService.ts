@@ -1,7 +1,7 @@
 import emailjs from "@emailjs/browser";
 
 export async function enviarCorreoAprobacion(params: {
-  to_email: string;
+  email: string;
   participant_name: string;
   numeros: (string | number)[];
   producto?: string;
@@ -16,7 +16,7 @@ export async function enviarCorreoAprobacion(params: {
     serviceId,
     templateId,
     {
-      to_email: params.to_email,
+      to_email: params.email,
       participant_name: params.participant_name,
       numeros: numerosTexto,
       producto: params.producto ?? "",
