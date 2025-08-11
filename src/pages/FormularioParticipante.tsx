@@ -564,6 +564,12 @@ export default function FormularioParticipante() {
                   <Sparkles className="h-5 w-5 mr-2 animate-pulse" />
                   Datos de la Cuenta
                 </h3>
+                <div className="flex justify-center mb-4">
+                  <img src="/public/bcn-logo.jpeg" 
+                  alt="Banco Nacional de Crédito"
+                  className="h-16 w-auto object-contain rounde-xl shadow-md"
+                  style={{background: "#fff"}} />
+                </div>
                 <div className="space-y-3 text-gray-700 text-sm bg-gray-50 p-4 rounded-xl border-2 border-red-100">
                   <div className="flex justify-between flex-wrap gap-y-1">
                     <span className="font-medium text-red-600">Titular:</span>
