@@ -600,12 +600,12 @@ export default function FormularioParticipante() {
                   Detalles del Pago
                 </h3>
                 <div className="bg-gradient-to-br from-red-50 via-red-100 to-red-50 border-2 border-red-200 rounded-xl p-6 relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br from-red-100/50 to-red-200/50"></div>
+                  {/* <div className="absolute inset-0 bg-gradient-to-br from-red-100/50 to-red-200/50"></div>
                   <div className="relative text-center">
                     <p className="text-3xl font-bold bg-gradient-to-r from-red-600 via-red-700 to-red-800 bg-clip-text text-transparent mb-2 drop-shadow-[0_0_20px_rgba(239,68,68,0.3)]">
                       USD $999
                     </p>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="text-sm text-gray-700 space-y-2 bg-gray-50 p-4 rounded-xl border-2 border-red-100">
                   <p>
