@@ -147,7 +147,7 @@ export default function FormularioParticipante() {
       return;
     }
 
-    // Validacion de Email 
+    // Validacion de Email
     const email10k = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email || "");
     if (!email10k) {
       showError("Por favor, ingresa un correo electrónico válido.");
@@ -378,7 +378,35 @@ export default function FormularioParticipante() {
             </h2>
           </div>
           <div className="p-8 text-gray-700 text-sm leading-relaxed space-y-2">
-            <p className="text-red-600 font-semibold">Instrucciones</p>
+            <p className="text-red-600 font-semibold mb-2">Instrucciones</p>
+            <ol className="list-decimal list-inside space-y-2">
+              <li>
+                Verificar la disponibilidad de los boletos antes de realizar el
+                pago.
+              </li>
+              <li>No se realiza devoluciones de pago bajo ningún concepto.</li>
+              <li>
+                La compra mínima es de 2 tickets en adelante para participar
+                ejemplo:{" "}
+                <span className="font-mono">(2, 4, 6, 8; números pares)</span>,
+                se asignan de manera aleatoria y enviados a su correo o WhatsApp
+                una vez confirmado el pago.
+              </li>
+              <li>
+                El premio será entregado en una dirección previamente coordinada
+                por nosotros y el ganador.
+              </li>
+              <li>Para reclamar tu premio tienes un lapso de 72 horas.</li>
+              <li>
+                Recibirá sus boletos después de verificar su pago en un lapso
+                mínimo de 12 horas y un máximo de 72 horas.
+              </li>
+              <li>
+                Si sus boletos no llegan en el tiempo estipulado debe
+                comunicarse con nosotros vía WhatsApp por el número registrado
+                en soporte.
+              </li>
+            </ol>
           </div>
         </div>
 
@@ -565,10 +593,12 @@ export default function FormularioParticipante() {
                   Datos de la Cuenta
                 </h3>
                 <div className="flex justify-center mb-4">
-                  <img src="/bcn-logo.jpeg" 
-                  alt="Banco Nacional de Crédito"
-                  className="h-20 w-auto object-contain rounde-xl shadow-md"
-                  style={{background: "#fff"}} />
+                  <img
+                    src="/bcn-logo.jpeg"
+                    alt="Banco Nacional de Crédito"
+                    className="h-20 w-auto object-contain rounde-xl shadow-md"
+                    style={{ background: "#fff" }}
+                  />
                 </div>
                 <div className="space-y-3 text-gray-700 text-sm bg-gray-50 p-4 rounded-xl border-2 border-red-100">
                   <div className="flex justify-between flex-wrap gap-y-1">
