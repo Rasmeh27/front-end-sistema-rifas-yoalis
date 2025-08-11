@@ -565,7 +565,7 @@ export default function FormularioParticipante() {
                   Datos de la Cuenta
                 </h3>
                 <div className="flex justify-center mb-4">
-                  <img src="/public/bcn-logo.jpeg" 
+                  <img src="/bcn-logo.jpeg" 
                   alt="Banco Nacional de Crédito"
                   className="h-16 w-auto object-contain rounde-xl shadow-md"
                   style={{background: "#fff"}} />
