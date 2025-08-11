@@ -567,7 +567,7 @@ export default function FormularioParticipante() {
                 <div className="flex justify-center mb-4">
                   <img src="/bcn-logo.jpeg" 
                   alt="Banco Nacional de Crédito"
-                  className="h-16 w-auto object-contain rounde-xl shadow-md"
+                  className="h-20 w-auto object-contain rounde-xl shadow-md"
                   style={{background: "#fff"}} />
                 </div>
                 <div className="space-y-3 text-gray-700 text-sm bg-gray-50 p-4 rounded-xl border-2 border-red-100">
