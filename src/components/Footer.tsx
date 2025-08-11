@@ -1,4 +1,4 @@
-import { Instagram, Linkedin, Globe, Shield, Gift, Trophy } from 'lucide-react';
+import { Instagram, Linkedin, Globe, UserRoundCogIcon, Shield, Gift, Trophy } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -29,6 +29,17 @@ export default function Footer() {
 
           {/* Información del sorteo */}
           <div className="space-y-4">
+            <div className="flex items-center space-x-2 group">
+              <UserRoundCogIcon className="w-5 h-5 text-red-500 transition-all duration-300" />
+              <span className="text-sm font-medium text-gray-700">
+                Soporte: +58 424-2962398
+              </span>
+            </div>
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4 hover:shadow-md transition-all duration-300">
+              <p className="text-gray-700 text-sm">
+                Fecha del sorteo: <span className="text-red-600 font-semibold">Lunes, 4 de agosto de 2025</span>
+              </p>
+            </div>
             <div className="flex items-center space-x-2">
               <Shield className="w-4 h-4 text-red-500" />
               <span className="text-xs text-gray-500">
