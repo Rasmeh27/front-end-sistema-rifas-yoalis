@@ -35,11 +35,6 @@ export default function Footer() {
                 Soporte: +58 424-2962398
               </span>
             </div>
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4 hover:shadow-md transition-all duration-300">
-              <p className="text-gray-700 text-sm">
-                Fecha del sorteo: <span className="text-red-600 font-semibold">Lunes, 4 de agosto de 2025</span>
-              </p>
-            </div>
             <div className="flex items-center space-x-2">
               <Shield className="w-4 h-4 text-red-500" />
               <span className="text-xs text-gray-500">
