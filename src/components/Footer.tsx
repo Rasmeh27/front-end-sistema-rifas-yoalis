@@ -32,7 +32,7 @@ export default function Footer() {
             <div className="flex items-center space-x-2 group">
               <UserRoundCogIcon className="w-5 h-5 text-red-500 transition-all duration-300" />
               <span className="text-sm font-medium text-gray-700">
-                Soporte: 0422.647.07.46
+                Soporte (telefono): 0422.647.07.46
               </span>
             </div>
             <div className="flex items-center space-x-2">
