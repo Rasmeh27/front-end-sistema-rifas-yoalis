@@ -1,4 +1,4 @@
-import { Trash2, Package } from 'lucide-react';
+import { Trash2, Package } from "lucide-react";
 import Swal from "sweetalert2";
 import { showSuccess, showError } from "../utils/alerts";
 
@@ -99,12 +99,13 @@ export default function ProductoAdminCard({
 
         {/* Información del producto */}
         <div className="text-center">
-          <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2">
+          {/* opcional: puedes dejar el nombre con 2 líneas si quieres */}
+          <h3 className="text-lg font-bold text-gray-900 mb-2">
             {producto.nombre}
           </h3>
-          
+
           {producto.descripcion && (
-            <p className="text-sm text-gray-600 mb-3 line-clamp-3">
+            <p className="text-sm text-gray-700 mb-3 whitespace-pre-line break-words">
               {producto.descripcion}
             </p>
           )}
