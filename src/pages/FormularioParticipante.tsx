@@ -328,22 +328,29 @@ export default function FormularioParticipante() {
                       />
                     </div>
                     <div className="p-4">
-                      <h3 className="font-bold text-gray-900 text-sm mb-2 line-clamp-2">
-                        {producto.nombre}
-                      </h3>
-                      <div className="flex items-center justify-between">
-                        <span className="text-red-600 font-bold text-lg">
-                          {producto.precio}
-                        </span>
-                        <div className="flex items-center text-yellow-500">
-                          <Star className="h-4 w-4 fill-current" />
-                          <Star className="h-4 w-4 fill-current" />
-                          <Star className="h-4 w-4 fill-current" />
-                          <Star className="h-4 w-4 fill-current" />
-                          <Star className="h-4 w-4 fill-current" />
-                        </div>
-                      </div>
-                    </div>
+  {/* Título: sin clamping */}
+  <h3 className="font-bold text-gray-900 text-sm mb-2">
+    {producto.nombre}
+  </h3>
+
+  {/* Descripción completa */}
+  <p className="text-gray-700 text-xs md:text-sm mb-3 whitespace-pre-line break-words">
+    {producto.descripcion ?? "Sin descripción"}
+  </p>
+
+  <div className="flex items-center justify-between">
+    <span className="text-red-600 font-bold text-lg">
+      {producto.precio}
+    </span>
+    <div className="flex items-center text-yellow-500">
+      <Star className="h-4 w-4 fill-current" />
+      <Star className="h-4 w-4 fill-current" />
+      <Star className="h-4 w-4 fill-current" />
+      <Star className="h-4 w-4 fill-current" />
+      <Star className="h-4 w-4 fill-current" />
+    </div>
+  </div>
+</div>
                     <div
                       className={`absolute inset-0 bg-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${
                         selectedProduct?.id === producto.id ? "opacity-20" : ""
